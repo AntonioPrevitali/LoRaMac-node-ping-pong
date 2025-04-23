@@ -36,12 +36,16 @@
  * -----------------------------------------------------------------------------
  * --- DEPENDENCIES ------------------------------------------------------------
  */
-#include "utilities.h"
-#include "timer.h"
-#include "delay.h"
+//REM AP #include "utilities.h"
+//REM AP #include "timer.h"
+//REM AP #include "delay.h"
 #include "radio_board.h"
 #include "loramac_radio.h"
 #include "ral.h"
+
+//REM AP era in timer.h
+#include <stddef.h>
+#include "myvarie.h"
 
 /*
  * -----------------------------------------------------------------------------
@@ -101,8 +105,8 @@ static const loramac_radio_irq_t* radio_irq_callbacks;
 /*!
  * Tx and Rx timers
  */
-static TimerEvent_t tx_timeout_timer;
-static TimerEvent_t rx_timeout_timer;
+extern TimerEvent_t tx_timeout_timer;
+extern TimerEvent_t rx_timeout_timer;
 
 /*
  * -----------------------------------------------------------------------------
@@ -677,6 +681,8 @@ loramac_radio_status_t loramac_radio_irq_process( void )
     {
         return LORAMAC_RADIO_STATUS_OK;
     }
+
+    MyIsIrqFired();
 
     status = ral_get_and_clear_irq_status( ral_context, &irq_flags );
     if( status != RAL_STATUS_OK )
