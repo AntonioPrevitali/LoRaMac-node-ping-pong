@@ -39,12 +39,13 @@
 
 #include <stdint.h>   // C99 types
 #include <stdbool.h>  // bool type
-#include "board.h"
-#include "board-config.h"
-#include "delay.h"
-#include "timer.h"
+//REM AP #include "board.h"
+//REM AP #include "board-config.h"
+//REM AP #include "delay.h"
+//REM AP #include "timer.h"
 #include "radio_board.h"
 #include "sx127x_hal.h"
+#include "myvarie.h"
 
 /*
  * -----------------------------------------------------------------------------
@@ -69,7 +70,11 @@
 /*!
  * SX127x HAL timer object
  */
-static TimerEvent_t timer_timeout = { 0 };
+//REM AP static TimerEvent_t timer_timeout = { 0 };
+extern TimerEvent_t timer_timeout;
+
+extern void ( *Mydio_0_irq_handler )( void* context );
+extern void* Mydio_0_irq_handler_context;
 
 /*
  * -----------------------------------------------------------------------------
@@ -94,6 +99,12 @@ sx127x_radio_id_t sx127x_hal_get_radio_id( const sx127x_t* radio )
 
 void sx127x_hal_dio_irq_attach( const sx127x_t* radio )
 {
+
+	Mydio_0_irq_handler = radio->dio_0_irq_handler;
+	Mydio_0_irq_handler_context = radio;
+
+//REM AP
+/*-----
     radio_context_t* radio_context = ( radio_context_t* ) ( radio->hal_context );
 
     // Attach driver pins interrupt handlers to MCU pins
@@ -103,11 +114,15 @@ void sx127x_hal_dio_irq_attach( const sx127x_t* radio )
     GpioSetContext( &radio_context->dio_1, ( sx127x_t* ) radio );
     GpioSetInterrupt( &radio_context->dio_2, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, radio->dio_2_irq_handler );
     GpioSetContext( &radio_context->dio_2, ( sx127x_t* ) radio );
+----*/
 }
 
 sx127x_hal_status_t sx127x_hal_write( const sx127x_t* radio, const uint16_t address, const uint8_t* data,
                                       const uint16_t data_length )
 {
+/*-----
+    //REM AP era cosi ###
+
     radio_context_t* radio_context = ( radio_context_t* ) ( radio->hal_context );
 
     CRITICAL_SECTION_BEGIN( );
@@ -122,11 +137,20 @@ sx127x_hal_status_t sx127x_hal_write( const sx127x_t* radio, const uint16_t addr
     GpioWrite( &radio_context->spi.Nss, 1 );
     CRITICAL_SECTION_END( );
     return SX127X_HAL_STATUS_OK;
+ ----*/
+
+	CRITICAL_SECTION_BEGIN( );
+	MySx1278_hal_write(address,data,data_length);
+	CRITICAL_SECTION_END( );
+    return SX127X_HAL_STATUS_OK;
+
 }
 
 sx127x_hal_status_t sx127x_hal_read( const sx127x_t* radio, const uint16_t address, uint8_t* data,
                                      const uint16_t data_length )
 {
+/*-----
+    //REM AP era cosi ###.
     radio_context_t* radio_context = ( radio_context_t* ) ( radio->hal_context );
 
     CRITICAL_SECTION_BEGIN( );
@@ -141,10 +165,19 @@ sx127x_hal_status_t sx127x_hal_read( const sx127x_t* radio, const uint16_t addre
     GpioWrite( &radio_context->spi.Nss, 1 );
     CRITICAL_SECTION_END( );
     return SX127X_HAL_STATUS_OK;
+ ----*/
+
+	CRITICAL_SECTION_BEGIN( );
+	MySx1278_hal_read(address,data,data_length);
+	CRITICAL_SECTION_END( );
+    return SX127X_HAL_STATUS_OK;
 }
 
 void sx127x_hal_reset( const sx127x_t* radio )
 {
+/*-----
+   //REM AP era cosi ###.
+
     radio_context_t* radio_context = ( radio_context_t* ) ( radio->hal_context );
 
     radio_board_start_radio_tcxo( );
@@ -165,13 +198,21 @@ void sx127x_hal_reset( const sx127x_t* radio )
 
     // Wait 6 ms
     DelayMs( 6 );
+ ----*/
+
+	MySx1278_hal_reset();
+
 }
 
 uint32_t sx127x_hal_get_dio_1_pin_state( const sx127x_t* radio )
 {
+//REM AP  ###  VEDI ANCHE UNO NEL MYVARIE !
+/*-----
     radio_context_t* radio_context = ( radio_context_t* ) ( radio->hal_context );
 
     return GpioRead( &radio_context->dio_1 );
+ ----*/
+	return 0;  // per ora cosi !
 }
 
 sx127x_hal_status_t sx127x_hal_timer_start( const sx127x_t* radio, const uint32_t time_in_ms,
@@ -181,14 +222,12 @@ sx127x_hal_status_t sx127x_hal_timer_start( const sx127x_t* radio, const uint32_
     TimerSetContext( &timer_timeout, ( void* ) radio );
     TimerSetValue( &timer_timeout, time_in_ms );
     TimerStart( &timer_timeout );
-
     return SX127X_HAL_STATUS_OK;
 }
 
 sx127x_hal_status_t sx127x_hal_timer_stop( const sx127x_t* radio )
 {
     TimerStop( &timer_timeout );
-
     return SX127X_HAL_STATUS_OK;
 }
 
