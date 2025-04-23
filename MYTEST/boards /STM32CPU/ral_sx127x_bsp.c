@@ -39,7 +39,7 @@
 
 #include <stdint.h>   // C99 types
 #include <stdbool.h>  // bool type
-#include "board.h"
+//REM AP #include "board.h"
 #include "radio_board.h"
 #include "ral_sx127x_bsp.h"
 #include "sx127x.h"
@@ -94,8 +94,17 @@ void ral_sx127x_bsp_get_tx_cfg( const void* context, const ral_sx127x_bsp_tx_cfg
         output_params->pa_cfg.is_20_dbm_output_on = false;
     }
 #elif defined( SX1276MB1MAS )
-    output_params->pa_cfg.pa_select           = SX127X_PA_SELECT_RFO;
-    output_params->pa_cfg.is_20_dbm_output_on = false;
+
+    // REM AP vabbe dai ci sta sono io che dico che è la SX1276MB1MAS
+    //        ma in verita è la RA01 !!!!
+    //        quindi ci sta che qui devo cambiare !
+    //REM AP output_params->pa_cfg.pa_select           = SX127X_PA_SELECT_RFO;
+    //REM AP output_params->pa_cfg.is_20_dbm_output_on = false;
+
+    output_params->pa_cfg.pa_select           = SX127X_PA_SELECT_BOOST;
+    output_params->pa_cfg.is_20_dbm_output_on = false;  // REM AP ### PER ORA NO POI VEDIAMO !
+
+
 #else
 #error "Please define a radio shield to be used"
 #endif
