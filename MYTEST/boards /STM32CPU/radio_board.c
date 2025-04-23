@@ -37,8 +37,8 @@
  * --- DEPENDENCIES ------------------------------------------------------------
  */
 #include <stdlib.h>
-#include "board-config.h"
-#include "delay.h"
+//REM AP#include "board-config.h"
+//REM AP #include "delay.h"
 #include "radio_board.h"
 #if defined( SX1261MBXBAS ) || defined( SX1262MBXCAS ) || defined( SX1262MBXDAS )
 #include "sx126x_lr_fhss.h"
@@ -106,7 +106,8 @@ static sx126x_lr_fhss_state_t sx126x_lr_fhss_state;
 /*!
  * Board context
  */
-static radio_context_t radio_context_reference;
+//REM AP sembra un errore nel file originale vedi che è già dichiarato un pochino piu sopra...
+//REM AP static radio_context_t radio_context_reference;
 
 /*!
  * SX127X context
@@ -131,18 +132,18 @@ static ral_t ral_context_reference = RAL_SX127X_INSTANTIATE( &sx127x_context_ref
 /*!
  * Antenna switch GPIO pins objects
  */
-Gpio_t ant_power;
+//REM AP Gpio_t ant_power;
 
 /*!
  * Device selection GPIO pins objects
  */
-Gpio_t device_sel;
+//REM AP Gpio_t device_sel;
 #elif defined( LR1110MB1XXS ) || defined( LR1120MB1XXS )
 #elif defined( SX1272MB2DAS ) || defined( SX1276MB1LAS ) || defined( SX1276MB1MAS )
 /*!
  * Antenna switch GPIO pins objects
  */
-Gpio_t ant_sw;
+//REM AP Gpio_t ant_sw;
 #endif
 
 /*
@@ -196,6 +197,8 @@ ral_status_t radio_board_init( const ral_t* ral_context, radio_board_dio_irq_han
 
 void radio_board_init_io( void )
 {
+//REM AP
+/*-----
     radio_context_t* radio_context = radio_board_get_radio_context_reference( );
 
 #if defined( SX1261MBXBAS ) || defined( SX1262MBXCAS ) || defined( SX1262MBXDAS )
@@ -216,10 +219,13 @@ void radio_board_init_io( void )
     GpioInit( &radio_context->dio_2, RADIO_DIO_2, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
     GpioInit( &ant_sw, RADIO_ANT_SWITCH, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
 #endif
+----- */
 }
 
 void radio_board_deinit_io( void )
 {
+//REM AP
+/*-----
     radio_context_t* radio_context = radio_board_get_radio_context_reference( );
 
 #if defined( SX1261MBXBAS ) || defined( SX1262MBXCAS ) || defined( SX1262MBXDAS )
@@ -239,26 +245,33 @@ void radio_board_deinit_io( void )
     GpioInit( &radio_context->dio_2, RADIO_DIO_2, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
     GpioInit( &ant_sw, RADIO_ANT_SWITCH, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
 #endif
+----- */
 }
 
 void radio_board_init_dbg_io( void )
 {
+//REM AP
+/*-----
 #if defined( USE_RADIO_DEBUG )
     radio_context_t* radio_context = radio_board_get_radio_context_reference( );
 
     GpioInit( &radio_context->dbg_tx, RADIO_DBG_PIN_TX, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
     GpioInit( &radio_context->dbg_rx, RADIO_DBG_PIN_RX, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
 #endif
+----- */
 }
 
 void radio_board_set_ant_switch( bool is_tx_on )
 {
+//REM AP
+/*-----
 #if defined( SX1261MBXBAS ) || defined( SX1262MBXCAS ) || defined( SX1262MBXDAS ) || defined( LR1110MB1XXS ) || \
     defined( LR1120MB1XXS )
     // Antenna switch is controlled by the radio on this board design. Nothing to do.
 #elif defined( SX1272MB2DAS ) || defined( SX1276MB1LAS ) || defined( SX1276MB1MAS )
     GpioWrite( &ant_sw, ( is_tx_on == true ) ? 1 : 0 );
 #endif
+----- */
 }
 
 void radio_board_start_radio_tcxo( void )
@@ -312,6 +325,8 @@ void radio_board_set_operating_mode( radio_board_operating_mode_t op_mode )
     radio_context_t* radio_context = radio_board_get_radio_context_reference( );
 
     radio_context->op_mode = op_mode;
+//REM AP
+/*-----
 #if defined( SX1261MBXBAS ) || defined( SX1262MBXCAS ) || defined( SX1262MBXDAS )
     if( op_mode == RADIO_BOARD_OP_MODE_SLEEP )
     {
@@ -343,14 +358,21 @@ void radio_board_set_operating_mode( radio_board_operating_mode_t op_mode )
         break;
     }
 #endif
+----- */
 }
 
+//REM AP
+//REM AP questa la commento da qui e la sposto nelle myvarie.h !!!
+//REM AP
+/*-----
 uint32_t radio_board_get_dio_1_pin_state( void )
 {
     radio_context_t* radio_context = radio_board_get_radio_context_reference( );
 
     return GpioRead( &radio_context->dio_1 );
 }
+----- */
+
 
 /*
  * -----------------------------------------------------------------------------
