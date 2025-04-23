@@ -702,6 +702,7 @@ sx127x_status_t sx127x_read_register( sx127x_t* radio, const uint16_t addr, uint
 
 sx127x_status_t sx127x_write_buffer( sx127x_t* radio, const uint8_t offset, const uint8_t* buffer, const uint8_t size )
 {
+
     for( int i = 0; i < size; i++ )
     {
         radio->buffer[offset + i] = buffer[i];
@@ -709,7 +710,12 @@ sx127x_status_t sx127x_write_buffer( sx127x_t* radio, const uint8_t offset, cons
 
     // Handle radio->buffer writing to the radio
     if( radio->pkt_type == SX127X_PKT_TYPE_LORA )
-    {  // LoRa
+    {
+    	//REM AP incredibile mi tocca anche di sistemare i BUG derivanti da una struttura cosi
+    	//       complessa !
+    	radio->lora_pkt_params.pld_len_in_bytes = size;
+
+    	// LoRa
         // Initialize payload length
         if( sx127x_write_register( radio, SX127X_REG_LORA_PAYLOAD_LENGTH, &radio->lora_pkt_params.pld_len_in_bytes,
                                    1 ) != SX127X_STATUS_OK )
@@ -734,7 +740,13 @@ sx127x_status_t sx127x_write_buffer( sx127x_t* radio, const uint8_t offset, cons
         }
     }
     else
-    {  // GFSK/OOK
+    {
+    	//REM AP incredibile mi tocca anche di sistemare i BUG derivanti da una struttura cosi
+    	//       complessa !
+    	radio->gfsk_pkt_params.pld_len_in_bytes = size;
+
+
+    	// GFSK/OOK
         radio->buffer_index = 0;
         if( radio->gfsk_pkt_params.header_type == SX127X_GFSK_PKT_VAR_LEN )
         {
