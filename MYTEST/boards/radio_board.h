@@ -45,8 +45,8 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "gpio.h"
-#include "spi.h"
+//REM AP #include "gpio.h"
+//REM AP #include "spi.h"
 #include "ral.h"
 #if defined( SX126X )
 #include "ral_sx126x_bsp.h"
@@ -128,6 +128,8 @@ typedef enum radio_board_operating_mode_e
  */
 typedef struct radio_context_s
 {
+// REM AP questi li commento
+/*-------------
     Spi_t  spi;
     Gpio_t reset;
 #if defined( SX126X ) || defined( LR11XX )
@@ -142,6 +144,7 @@ typedef struct radio_context_s
     Gpio_t dbg_tx;
     Gpio_t dbg_rx;
 #endif
+--------- */
     radio_board_operating_mode_t op_mode;
     radio_params_t               radio_params;
 } radio_context_t;
