@@ -15,6 +15,10 @@ extern "C"
 void BoardCriticalSectionBegin( uint32_t* mask );
 void BoardCriticalSectionEnd( uint32_t* mask );
 
+void MyReportRegModified(void);
+void MyClearReportRegModified(void);
+
+
 void EnableMyPrint(void);
 void DisableMyPrint(void);
 void MyIsIrqFired(void);
