@@ -6,6 +6,16 @@
   ******************************************************************************
   * @attention
   *
+  *
+  *   QUESTA è come il Mylora06 ma ho semplificato tutti i giri di wrapper
+  *   eliminando quei wrapper che non facevano nulla ma semplicemente chiamavano
+  *   un altra funzione. (ho semplificato chiamando direttamente la funzione)
+  *   Ho provato a far fare questo lavoro di riduzione alle AI ma alla fine
+  *   lo ho dovuto ancora fare io a mano !!!!
+  *   Questa riduzione facilita il debug e la comprensione, e mette in evidenza
+  *   le cose che vengono fatte nella ral.
+  *
+  *
   *   Questi i file che ho copiato dalla LoRaMac-node-5.0.0-branch e che ho poi
   *   modificato ed adattato.
   *
@@ -32,9 +42,6 @@
   *
   *
   *  Ed anche questo ha funzionato sia in lora che in fsk.
-  *  NB spesso nello slave arriva un PONG cosa che in teoria il master non strasmette.
-  *     o casini nel codice o nell'hardware... sarebbe da indagare meglio !
-  *
   *
   * This software is licensed under terms that can be found in the LICENSE file
   * in the root directory of this software component.
@@ -82,6 +89,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
+
+UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 
@@ -273,8 +282,8 @@ static uint8_t app_data_buffer[PING_PONG_APP_DATA_MAX_SIZE];
 static app_context_t app_context = {
     .state                = APP_STATE_LOW_POWER,
 
-    .is_master            = true,
-	//.is_master            = false,
+	//.is_master            = true,
+	.is_master            = false,
 
     .buffer_size_in_bytes = APP_PLD_LEN_IN_BYTES,
     .buffer               = app_data_buffer,
@@ -332,13 +341,17 @@ static void app_build_message( bool is_ping_msg, uint8_t* buffer, uint8_t size_i
 
 static void irq_tx_done( void )
 {
+	printf("irq_tx_done\n");
     loramac_radio_set_sleep( );
     app_context.state = APP_STATE_TX;
 }
 
 static void irq_rx_done( loramac_radio_irq_rx_done_params_t* params )
 {
+	printf("irq_rx_done\n");
     loramac_radio_set_sleep( );
+
+    // cazzata quin non controlla la lunghezza e potrebbe sovrascrivere mem...
 
     memcpy( app_context.buffer, params->buffer, params->size_in_bytes );
 
@@ -448,6 +461,7 @@ static void app_build_message( bool is_ping_msg, uint8_t* buffer, uint8_t size_i
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -487,6 +501,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   // Target board initialization
@@ -494,6 +509,7 @@ int main(void)
   //REM AP BoardInitPeriph( );
 
   printf( "MyPrintf\n" );  // vedi in myvarie la gestione...
+  MyClearReportRegModified();
 
   // Radio initialization
   Myradio_irq_callbacks.loramac_radio_irq_tx_done    = irq_tx_done;
@@ -543,9 +559,22 @@ int main(void)
   loramac_radio_gfsk_set_cfg( &gfsk_params );
 #endif
 
-  //REM AP loramac_radio_set_rx( RAL_RX_TIMEOUT_CONTINUOUS_MODE );
+
+
+// vediamo qui i registri modificati durante diciamo il setup...
+//MyReportRegModified();
+//MyClearReportRegModified();  // pulisco...
+
+//REM AP loramac_radio_set_rx( RAL_RX_TIMEOUT_CONTINUOUS_MODE );
   printf( "radio_set_rx\n" );
   loramac_radio_set_rx( RX_TIMEOUT_VALUE );
+
+// rivediamo qui i registri modificati per attivare RX...
+MyReportRegModified();
+MyClearReportRegModified();  // pulisco...
+DisableMyPrint();
+//REM AP EnableMyPrint(); al bisogno per debug.
+
 
   /* USER CODE END 2 */
 
@@ -613,8 +642,10 @@ int main(void)
                       app_build_message( false, app_context.buffer, app_context.buffer_size_in_bytes );
                       DelayMs( 1 );
                       //REM AP printf( "[APP] pong message transmission\n" );
-                      printf( "radio_trasmit pong\n" );
+
+                      printf( "\nradio_trasmit pong\n" );
                       loramac_radio_transmit( app_context.buffer, app_context.buffer_size_in_bytes );
+
                   }
                   else  // valid reception but not a PING as expected
                   {     // Set device as master and start again
@@ -655,8 +686,16 @@ int main(void)
               app_build_message( true, app_context.buffer, app_context.buffer_size_in_bytes );
               DelayMs( 1 );
               //REM AP printf( "[APP] ping message transmission\n" );
+
+
               printf( "radio_trasmit ping\n" );
+              //MyReportRegModified();
+              //MyClearReportRegModified();
+
               loramac_radio_transmit( app_context.buffer, app_context.buffer_size_in_bytes );
+              //MyReportRegModified();
+              //MyClearReportRegModified();
+
           }
           else
           {
@@ -775,6 +814,39 @@ static void MX_SPI1_Init(void)
 }
 
 /**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART1_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 9600;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART1_Init 2 */
+
+  /* USER CODE END USART1_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -782,8 +854,8 @@ static void MX_SPI1_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
@@ -827,8 +899,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(PYPB1_RST_GPIO_Port, &GPIO_InitStruct);
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
