@@ -42,6 +42,7 @@
 #include "radio_board.h"
 #include "loramac_radio.h"
 #include "ral.h"
+#include "ral_sx127x.h"
 
 //REM AP era in timer.h
 #include <stddef.h>
@@ -183,7 +184,10 @@ loramac_radio_status_t loramac_radio_init( const loramac_radio_irq_t* irq_callba
     TimerInit( &rx_timeout_timer, rx_timeout_irq );
 
     // Initialize radio driver
-    return ( loramac_radio_status_t ) radio_board_init( ral_context, radio_irq );
+    //REM AP return ( loramac_radio_status_t ) radio_board_init( ral_context, radio_irq );
+    return ( loramac_radio_status_t ) ral_sx127x_bsp_init( ral_context, radio_irq );
+
+
 }
 
 bool loramac_radio_is_radio_idle( void )
@@ -297,7 +301,7 @@ loramac_radio_status_t loramac_radio_lr_fhss_set_cfg( const loramac_radio_lr_fhs
 #if( LORAMAC_LR_FHSS_IS_ON == 1 )
     ral_t*           ral_context   = radio_board_get_ral_context_reference( );
     radio_context_t* radio_context = radio_board_get_radio_context_reference( );
-    uint32_t hop_sequence_count    = ral_lr_fhss_get_hop_sequence_count( ral_context, &cfg_params->lr_fhss_params );
+    uint32_t hop_sequence_count    = ral_sx127x_lr_fhss_get_hop_sequence_count( ral_context->context, &cfg_params->lr_fhss_params );
 
     radio_context->radio_params.rf_freq_in_hz    = cfg_params->lr_fhss_params.center_frequency_in_hz;
     radio_context->radio_params.tx_rf_pwr_in_dbm = cfg_params->tx_rf_pwr_in_dbm;
@@ -307,13 +311,13 @@ loramac_radio_status_t loramac_radio_lr_fhss_set_cfg( const loramac_radio_lr_fhs
 
     radio_context->radio_params.tx_timeout_in_ms = cfg_params->tx_timeout_in_ms;
 
-    status = ral_set_standby( ral_context, RAL_STANDBY_CFG_RC );
+    status = sx127x_set_standby( ral_context->context);
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
     radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_STDBY );
-    status = ral_lr_fhss_init( ral_context, &cfg_params->lr_fhss_params );
+    status = ral_sx127x_lr_fhss_init( ral_context->context, &cfg_params->lr_fhss_params );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
@@ -334,14 +338,14 @@ loramac_radio_status_t loramac_radio_transmit( const uint8_t* buffer, const uint
     if( radio_context->radio_params.lr_fhss.is_lr_fhss_on == true )
     {
         status =
-            ral_lr_fhss_build_frame( ral_context, &radio_context->radio_params.lr_fhss.lr_fhss_params, lr_fhss_state,
+            ral_sx127x_lr_fhss_build_frame( ral_context->context, &radio_context->radio_params.lr_fhss.lr_fhss_params, lr_fhss_state,
                                      radio_context->radio_params.lr_fhss.hop_sequence_id, buffer, size_in_bytes );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
         }
         // RAL_IRQ_TX_DONE, RAL_IRQ_LR_FHSS_HOP
-        status = ral_set_dio_irq_params( ral_context, RAL_IRQ_TX_DONE | RAL_IRQ_LR_FHSS_HOP );
+        status = ral_sx127x_set_dio_irq_params( ral_context->context, RAL_IRQ_TX_DONE | RAL_IRQ_LR_FHSS_HOP );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
@@ -350,26 +354,26 @@ loramac_radio_status_t loramac_radio_transmit( const uint8_t* buffer, const uint
     else
 #endif
     {
-        status = ral_set_pkt_payload( ral_context, buffer, size_in_bytes );
+        status = ral_sx127x_set_pkt_payload( ral_context->context, buffer, size_in_bytes );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
         }
         // RAL_IRQ_TX_DONE
-        status = ral_set_dio_irq_params( ral_context, RAL_IRQ_TX_DONE );
+        status = ral_sx127x_set_dio_irq_params( ral_context->context, RAL_IRQ_TX_DONE );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
         }
     }
     radio_board_set_ant_switch( true );
-    status = ral_set_tx_cfg( ral_context, radio_context->radio_params.tx_rf_pwr_in_dbm,
+    status = ral_sx127x_set_tx_cfg( ral_context->context, radio_context->radio_params.tx_rf_pwr_in_dbm,
                              radio_context->radio_params.rf_freq_in_hz );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
-    status = ral_set_tx( ral_context );
+    status = sx127x_set_tx( ral_context->context );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
@@ -386,7 +390,7 @@ loramac_radio_status_t loramac_radio_set_sleep( void )
     ral_t*           ral_context   = radio_board_get_ral_context_reference( );
     radio_context_t* radio_context = radio_board_get_radio_context_reference( );
 
-    status = ral_set_sleep( ral_context, true );
+    status = sx127x_set_sleep( ral_context->context);
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
@@ -406,7 +410,7 @@ loramac_radio_status_t loramac_radio_set_standby( void )
     ral_t*       ral_context = radio_board_get_ral_context_reference( );
 
     radio_board_start_radio_tcxo( );
-    status = ral_set_standby( ral_context, RAL_STANDBY_CFG_RC );
+    status = sx127x_set_standby( ral_context->context);
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
@@ -431,17 +435,17 @@ loramac_radio_status_t loramac_radio_set_rx( const uint32_t timeout_in_ms )
     radio_board_start_radio_tcxo( );
     radio_board_set_ant_switch( false );
     // RAL_IRQ_RX_DONE | RAL_IRQ_RX_TIMEOUT, RAL_IRQ_RX_CRC_ERROR
-    status = ral_set_dio_irq_params( ral_context, RAL_IRQ_RX_DONE | RAL_IRQ_RX_TIMEOUT | RAL_IRQ_RX_CRC_ERROR );
+    status = ral_sx127x_set_dio_irq_params( ral_context->context, RAL_IRQ_RX_DONE | RAL_IRQ_RX_TIMEOUT | RAL_IRQ_RX_CRC_ERROR );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
     // Note: For SX127x radios this API returns unsupported feature.
-    status = ral_cfg_rx_boosted( ral_context, false );
-    if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
-    {
-        return ( loramac_radio_status_t ) status;
-    }
+    //REM AP status = ral_cfg_rx_boosted( ral_context, false );
+    //REM AP if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
+    //REM AP {
+    //REM AP     return ( loramac_radio_status_t ) status;
+    //REM AP }
     if( timeout_in_ms != 0 )
     {
         TimerSetValue( &rx_timeout_timer, timeout_in_ms );
@@ -449,12 +453,12 @@ loramac_radio_status_t loramac_radio_set_rx( const uint32_t timeout_in_ms )
     }
     if( radio_context->radio_params.is_rx_continuous == true )
     {
-        status = ral_set_rx( ral_context, RAL_RX_TIMEOUT_CONTINUOUS_MODE );
+        status = ral_sx127x_set_rx( ral_context->context, RAL_RX_TIMEOUT_CONTINUOUS_MODE );
         radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_RX_C );
     }
     else
     {
-        status = ral_set_rx( ral_context, radio_context->radio_params.rx_timeout_in_ms );
+        status = ral_sx127x_set_rx( ral_context->context, radio_context->radio_params.rx_timeout_in_ms );
         radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_RX );
     }
     return ( loramac_radio_status_t ) status;
@@ -477,24 +481,24 @@ loramac_radio_status_t loramac_radio_set_tx_cw( const loramac_radio_tx_cw_cfg_pa
     {
         uint16_t freq_in_mhz = cfg_params->rf_freq_in_hz / 1000000;
 
-        status = ral_cal_img( ral_context, freq_in_mhz, freq_in_mhz );
+        status = ral_sx127x_cal_img( ral_context->context, freq_in_mhz, freq_in_mhz );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
         }
         radio_context->radio_params.is_image_calibrated = true;
     }
-    status = ral_set_rf_freq( ral_context, cfg_params->rf_freq_in_hz );
+    status = sx127x_set_rf_freq( ral_context->context, cfg_params->rf_freq_in_hz );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
-    status = ( ral_status_t ) ral_set_tx_cfg( ral_context, cfg_params->tx_rf_pwr_in_dbm, cfg_params->rf_freq_in_hz );
+    status = ( ral_status_t ) ral_sx127x_set_tx_cfg( ral_context->context, cfg_params->tx_rf_pwr_in_dbm, cfg_params->rf_freq_in_hz );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
-    status = ral_set_tx_cw( ral_context );
+    status = sx127x_set_tx_cw( ral_context->context );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
@@ -534,12 +538,12 @@ loramac_radio_status_t loramac_radio_is_channel_free( const loramac_radio_channe
     {
         return ( loramac_radio_status_t ) status;
     }
-    status = ral_set_dio_irq_params( ral_context, RAL_IRQ_NONE );
+    status = ral_sx127x_set_dio_irq_params( ral_context->context, RAL_IRQ_NONE );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
-    status = ral_set_rx( ral_context, RAL_RX_TIMEOUT_CONTINUOUS_MODE );
+    status = ral_sx127x_set_rx( ral_context->context, RAL_RX_TIMEOUT_CONTINUOUS_MODE );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
@@ -551,7 +555,7 @@ loramac_radio_status_t loramac_radio_is_channel_free( const loramac_radio_channe
     // Perform carrier sense for max_carrier_sense_time_ms
     while( TimerGetElapsedTime( start_time ) < cfg_params->max_carrier_sense_time_ms )
     {
-        status = ral_get_rssi_inst( ral_context, &rssi );
+        status = sx127x_get_rssi_inst( ral_context->context, &rssi );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
@@ -562,7 +566,7 @@ loramac_radio_status_t loramac_radio_is_channel_free( const loramac_radio_channe
             break;
         }
     }
-    status = ral_set_sleep( ral_context, true );
+    status = sx127x_set_sleep( ral_context->context);
     radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_SLEEP );
     return ( loramac_radio_status_t ) status;
 }
@@ -578,7 +582,7 @@ loramac_radio_status_t loramac_radio_set_network_type( const bool is_public_netw
 
 uint32_t loramac_radio_gfsk_get_time_on_air_in_ms( const loramac_radio_gfsk_time_on_air_params_t* params )
 {
-    ral_t*                ral_context = radio_board_get_ral_context_reference( );
+    //REM AP ral_t*                ral_context = radio_board_get_ral_context_reference( );
     ral_gfsk_mod_params_t mod_params  = {
         .br_in_bps = params->br_in_bps,
     };
@@ -588,12 +592,12 @@ uint32_t loramac_radio_gfsk_get_time_on_air_in_ms( const loramac_radio_gfsk_time
         .pld_len_in_bytes     = params->pld_len_in_bytes,
         .crc_type             = ( params->is_crc_on == true ) ? RAL_GFSK_CRC_2_BYTES_INV : RAL_GFSK_CRC_OFF,
     };
-    return ral_get_gfsk_time_on_air_in_ms( ral_context, &pkt_params, &mod_params );
+    return ral_sx127x_get_gfsk_time_on_air_in_ms( &pkt_params, &mod_params );
 }
 
 uint32_t loramac_radio_lora_get_time_on_air_in_ms( const loramac_radio_lora_time_on_air_params_t* params )
 {
-    ral_t*                ral_context = radio_board_get_ral_context_reference( );
+    //REM AP ral_t*                ral_context = radio_board_get_ral_context_reference( );
     ral_lora_mod_params_t mod_params  = {
         .sf   = params->sf,
         .bw   = params->bw,
@@ -606,7 +610,7 @@ uint32_t loramac_radio_lora_get_time_on_air_in_ms( const loramac_radio_lora_time
         .pld_len_in_bytes     = params->pld_len_in_bytes,
         .crc_is_on            = params->is_crc_on,
     };
-    return ral_get_lora_time_on_air_in_ms( ral_context, &pkt_params, &mod_params );
+    return ral_sx127x_get_lora_time_on_air_in_ms( &pkt_params, &mod_params );
 }
 
 uint32_t loramac_radio_lr_fhss_get_time_on_air_in_ms( const loramac_radio_lr_fhss_time_on_air_params_t* params )
@@ -615,7 +619,7 @@ uint32_t loramac_radio_lr_fhss_get_time_on_air_in_ms( const loramac_radio_lr_fhs
     ral_status_t status            = RAL_STATUS_ERROR;
     ral_t*       ral_context       = radio_board_get_ral_context_reference( );
     uint32_t     time_on_air_in_ms = 0;
-    status = ral_lr_fhss_get_time_on_air_in_ms( ral_context, &params->lr_fhss_params, params->pld_len_in_bytes,
+    status = ral_sx127x_lr_fhss_get_time_on_air_in_ms( ral_context->context, &params->lr_fhss_params, params->pld_len_in_bytes,
                                                 &time_on_air_in_ms );
     if( status != RAL_STATUS_OK )
     {
@@ -644,25 +648,25 @@ loramac_radio_status_t loramac_radio_get_random_number( uint32_t* random_number 
     ral_t*       ral_context = radio_board_get_ral_context_reference( );
 
     // Set operating mode to standby
-    status = ral_set_standby( ral_context, RAL_STANDBY_CFG_RC );
+    status = sx127x_set_standby( ral_context->context);
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
     radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_STDBY );
     // Set a valid packet type
-    status = ral_set_pkt_type( ral_context, RAL_PKT_TYPE_LORA );
+    status = ral_sx127x_set_pkt_type( ral_context->context, RAL_PKT_TYPE_LORA );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
     // Disable all radio interrupts
-    status = ral_set_dio_irq_params( ral_context, RAL_IRQ_NONE );
+    status = ral_sx127x_set_dio_irq_params( ral_context->context, RAL_IRQ_NONE );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
     }
-    return ( loramac_radio_status_t ) ral_get_random_numbers( ral_context, random_number, 1 );
+    return ( loramac_radio_status_t ) sx127x_get_random_numbers( ral_context->context, random_number, 1 );
 }
 
 loramac_radio_status_t loramac_radio_irq_process( void )
@@ -684,7 +688,7 @@ loramac_radio_status_t loramac_radio_irq_process( void )
 
     MyIsIrqFired();
 
-    status = ral_get_and_clear_irq_status( ral_context, &irq_flags );
+    status = ral_sx127x_get_and_clear_irq_status( ral_context->context, &irq_flags );
     if( status != RAL_STATUS_OK )
     {
         return ( loramac_radio_status_t ) status;
@@ -710,15 +714,15 @@ loramac_radio_status_t loramac_radio_irq_process( void )
         if( op_mode != RADIO_BOARD_OP_MODE_RX_C )
         {
             radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_STDBY );
-#if defined( SX126X )
-            // WORKAROUND - Implicit Header Mode Timeout Behavior, see DS_SX1261-2_V1.2 datasheet chapter 15.3
-            status = ( ral_status_t ) sx126x_stop_rtc( radio_context );
-            if( status != RAL_STATUS_OK )
-            {
-                return ( loramac_radio_status_t ) status;
-            }
-            // WORKAROUND END
-#endif
+//REM AP #if defined( SX126X )
+//REM AP             // WORKAROUND - Implicit Header Mode Timeout Behavior, see DS_SX1261-2_V1.2 datasheet chapter 15.3
+//REM AP             status = ( ral_status_t ) sx126x_stop_rtc( radio_context );
+//REM AP             if( status != RAL_STATUS_OK )
+//REM AP            {
+//REM AP                 return ( loramac_radio_status_t ) status;
+//REM AP            }
+//REM AP             // WORKAROUND END
+//REM AP #endif
         }
     }
     // Process radio irq flags
@@ -728,7 +732,7 @@ loramac_radio_status_t loramac_radio_irq_process( void )
 #if( LORAMAC_LR_FHSS_IS_ON == 1 )
         if( radio_context->radio_params.lr_fhss.is_lr_fhss_on == true )
         {
-            status = ral_lr_fhss_handle_tx_done( ral_context, &radio_context->radio_params.lr_fhss.lr_fhss_params,
+            status = ral_sx127x_lr_fhss_handle_tx_done( ral_context->context, &radio_context->radio_params.lr_fhss.lr_fhss_params,
                                                  lr_fhss_state );
             if( status != RAL_STATUS_OK )
             {
@@ -750,13 +754,13 @@ loramac_radio_status_t loramac_radio_irq_process( void )
         };
 
         TimerStop( &rx_timeout_timer );
-        status = ral_get_pkt_payload( ral_context, radio_context->radio_params.max_payload_length,
+        status = ral_sx127x_get_pkt_payload( ral_context->context, radio_context->radio_params.max_payload_length,
                                       radio_context->radio_params.buffer, &rx_done_params.size_in_bytes );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
         }
-        status = ral_get_pkt_type( ral_context, &pkt_type );
+        status = ral_sx127x_get_pkt_type( ral_context->context, &pkt_type );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
@@ -765,7 +769,7 @@ loramac_radio_status_t loramac_radio_irq_process( void )
         {
             ral_lora_rx_pkt_status_t lora_rx_pkt_status;
 
-            status = ral_get_lora_rx_pkt_status( ral_context, &lora_rx_pkt_status );
+            status = ral_sx127x_get_lora_rx_pkt_status( ral_context->context, &lora_rx_pkt_status );
             if( status != RAL_STATUS_OK )
             {
                 return ( loramac_radio_status_t ) status;
@@ -781,7 +785,7 @@ loramac_radio_status_t loramac_radio_irq_process( void )
         {
             ral_gfsk_rx_pkt_status_t gfsk_rx_pkt_status;
 
-            status = ral_get_gfsk_rx_pkt_status( ral_context, &gfsk_rx_pkt_status );
+            status = ral_sx127x_get_gfsk_rx_pkt_status( ral_context->context, &gfsk_rx_pkt_status );
             if( status != RAL_STATUS_OK )
             {
                 return ( loramac_radio_status_t ) status;
@@ -826,7 +830,7 @@ loramac_radio_status_t loramac_radio_irq_process( void )
     if( ( irq_flags & RAL_IRQ_LR_FHSS_HOP ) == RAL_IRQ_LR_FHSS_HOP )
     {
         status =
-            ral_lr_fhss_handle_hop( ral_context, &radio_context->radio_params.lr_fhss.lr_fhss_params, lr_fhss_state );
+            ral_sx127x_lr_fhss_handle_hop( ral_context->context, &radio_context->radio_params.lr_fhss.lr_fhss_params, lr_fhss_state );
         if( status != RAL_STATUS_OK )
         {
             return ( loramac_radio_status_t ) status;
@@ -850,11 +854,12 @@ static void radio_irq( void* context )
 
 static void tx_timeout_irq( void* context )
 {
+//REM AP ##### QUI DIREI CHE VA FATTO ! MA PER ORA NO ! basta attivare nei simboli la SX127X
 #if( SX127X )
-    sx127x_t* sx127x_context = radio_board_get_sx127x_context_reference( );
+     sx127x_t* sx127x_context = radio_board_get_sx127x_context_reference( );
 
-    sx127x_tx_timeout_irq_workaround( sx127x_context );
-    radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_SLEEP );
+     sx127x_tx_timeout_irq_workaround( sx127x_context );
+     radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_SLEEP );
 #endif
     if( ( radio_irq_callbacks != NULL ) && ( radio_irq_callbacks->loramac_radio_irq_tx_timeout != NULL ) )
     {
@@ -880,65 +885,65 @@ static ral_status_t radio_gfsk_setup( const ral_t* context, const ral_gfsk_mod_p
     radio_context->radio_params.lr_fhss.is_lr_fhss_on = false;
 #endif
 
-    status = ral_set_standby( context, RAL_STANDBY_CFG_RC );
+    status = sx127x_set_standby( context->context);
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
     radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_STDBY );
-    status = ral_set_pkt_type( context, RAL_PKT_TYPE_GFSK );
+    status = ral_sx127x_set_pkt_type( context->context, RAL_PKT_TYPE_GFSK );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
     // Note: For SX127x radios this API returns unsupported feature.
-    status = ral_stop_timer_on_preamble( context, false );
-    if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
-    {
-        return status;
-    }
+    //REM AP status = ral_sx127x_stop_timer_on_preamble( context->context, false );
+    //REM AP if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
+    //REM AP {
+    //REM AP     return status;
+    //REM AP }
     if( radio_context->radio_params.is_image_calibrated == false )
     {
         uint16_t freq_in_mhz = radio_context->radio_params.rf_freq_in_hz / 1000000;
 
-        status = ral_cal_img( context, freq_in_mhz, freq_in_mhz );
+        status = ral_sx127x_cal_img( context->context, freq_in_mhz, freq_in_mhz );
         if( status != RAL_STATUS_OK )
         {
             return status;
         }
         radio_context->radio_params.is_image_calibrated = true;
     }
-    status = ral_set_rf_freq( context, radio_context->radio_params.rf_freq_in_hz );
+    status = sx127x_set_rf_freq( context->context, radio_context->radio_params.rf_freq_in_hz );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
-    status = ral_set_tx_cfg( context, radio_context->radio_params.tx_rf_pwr_in_dbm,
+    status = ral_sx127x_set_tx_cfg( context->context, radio_context->radio_params.tx_rf_pwr_in_dbm,
                              radio_context->radio_params.rf_freq_in_hz );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
-    status = ral_set_gfsk_mod_params( context, mod_params );
+    status = ral_sx127x_set_gfsk_mod_params( context->context, mod_params );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
-    status = ral_set_gfsk_pkt_params( context, pkt_params );
+    status = ral_sx127x_set_gfsk_pkt_params( context->context, pkt_params );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
     if( pkt_params->crc_type != RAL_GFSK_CRC_OFF )
     {
-        // Note: For SX127x radios this API returns unsupported feature.
-        status = ral_set_gfsk_crc_params( context, extra_params->crc_seed, extra_params->crc_polynomial );
-        if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
-        {
-            return status;
-        }
+    	// Note: For SX127x radios this API returns unsupported feature.
+    	//REM AP status = ral_sx127x_set_gfsk_crc_params( context->context, extra_params->crc_seed, extra_params->crc_polynomial );
+    	//REM AP if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
+    	//REM AP {
+    	//REM AP     return status;
+    	//REM AP }
     }
-    status = ral_set_gfsk_sync_word( context, extra_params->sync_word, ( pkt_params->sync_word_len_in_bits + 7 ) / 8 );
+    status = sx127x_set_gfsk_sync_word( context->context, extra_params->sync_word, ( pkt_params->sync_word_len_in_bits + 7 ) / 8 );
     if( status != RAL_STATUS_OK )
     {
         return status;
@@ -946,11 +951,12 @@ static ral_status_t radio_gfsk_setup( const ral_t* context, const ral_gfsk_mod_p
     if( pkt_params->dc_free == RAL_GFSK_DC_FREE_WHITENING )
     {
         // Note: For SX127x radios this API returns unsupported feature.
-        status = ral_set_gfsk_whitening_seed( context, extra_params->whitening_seed );
-        if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
-        {
-            return status;
-        }
+        //REM AP status = ral_sx127x_set_gfsk_whitening_seed( context->context, extra_params->whitening_seed );
+    	//REM AP if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
+    	//REM AP {
+    	//REM AP     return status;
+    	//REM AP }
+    	status = RAL_STATUS_UNSUPPORTED_FEATURE;  // qui giusto cosi !
     }
     return status;
 }
@@ -965,24 +971,25 @@ static ral_status_t radio_lora_setup( const ral_t* context, const ral_lora_mod_p
     radio_context->radio_params.lr_fhss.is_lr_fhss_on = false;
 #endif
 
-    status = ral_set_standby( context, RAL_STANDBY_CFG_RC );
+    //REM AP status = ral_set_standby( context, RAL_STANDBY_CFG_RC );
+    status = sx127x_set_standby( (sx127x_t*) context->context);
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
     radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_STDBY );
-    status = ral_set_pkt_type( context, RAL_PKT_TYPE_LORA );
+    status = ral_sx127x_set_pkt_type( context->context, RAL_PKT_TYPE_LORA );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
     // Note: For SX127x radios this API returns unsupported feature.
-    status = ral_stop_timer_on_preamble( context, false );
-    if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
-    {
-        return status;
-    }
-    status = ral_set_lora_symb_nb_timeout( context, extra_params->rx_sync_timeout_in_symb );
+    //REM AP status = ral_stop_timer_on_preamble( context, false );
+    //REM AP if( ( status != RAL_STATUS_OK ) && ( status != RAL_STATUS_UNSUPPORTED_FEATURE ) )
+    //REM AP {
+    //REM AP     return status;
+    //REM AP }
+    status = sx127x_set_lora_sync_timeout( context->context, extra_params->rx_sync_timeout_in_symb );
     if( status != RAL_STATUS_OK )
     {
         return status;
@@ -991,35 +998,35 @@ static ral_status_t radio_lora_setup( const ral_t* context, const ral_lora_mod_p
     {
         uint16_t freq_in_mhz = radio_context->radio_params.rf_freq_in_hz / 1000000;
 
-        status = ral_cal_img( context, freq_in_mhz, freq_in_mhz );
+        status = ral_sx127x_cal_img( context, freq_in_mhz, freq_in_mhz );
         if( status != RAL_STATUS_OK )
         {
             return status;
         }
         radio_context->radio_params.is_image_calibrated = true;
     }
-    status = ral_set_rf_freq( context, radio_context->radio_params.rf_freq_in_hz );
+    status = sx127x_set_rf_freq( context->context, radio_context->radio_params.rf_freq_in_hz );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
-    status = ral_set_tx_cfg( context, radio_context->radio_params.tx_rf_pwr_in_dbm,
+    status = ral_sx127x_set_tx_cfg( context->context, radio_context->radio_params.tx_rf_pwr_in_dbm,
                              radio_context->radio_params.rf_freq_in_hz );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
-    status = ral_set_lora_mod_params( context, mod_params );
+    status = ral_sx127x_set_lora_mod_params( context->context, mod_params );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
-    status = ral_set_lora_pkt_params( context, pkt_params );
+    status = ral_sx127x_set_lora_pkt_params( context->context, pkt_params );
     if( status != RAL_STATUS_OK )
     {
         return status;
     }
-    status = ral_set_lora_sync_word( context, extra_params->sync_word );
+    status = sx127x_set_lora_sync_word( context->context, extra_params->sync_word );
     if( status != RAL_STATUS_OK )
     {
         return status;

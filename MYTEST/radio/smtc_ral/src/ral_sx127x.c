@@ -153,42 +153,45 @@ bool ral_sx127x_handles_part( const char* part_number )
            ( strcmp( "sx1278", part_number ) == 0 ) || ( strcmp( "sx1279", part_number ) == 0 );
 }
 
-ral_status_t ral_sx127x_reset( const void* context )
-{
-    return ( ral_status_t ) sx127x_reset( ( sx127x_t* ) context );
-}
 
-ral_status_t ral_sx127x_init( const void* context )
-{
-    return ( ral_status_t ) sx127x_init( ( sx127x_t* ) context );
-}
+//REM AP Anche qui vado a eliminare queste ed a mettere chiamate dirette !
 
-ral_status_t ral_sx127x_wakeup( const void* context )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM APral_status_t ral_sx127x_reset( const void* context )
+//REM AP{
+//REM AP    return ( ral_status_t ) sx127x_reset( ( sx127x_t* ) context );
+//REM AP}
 
-ral_status_t ral_sx127x_set_sleep( const void* context, const bool retain_config )
-{
-    // retain_config parameter is not supported by SX127x radios
-    return ( ral_status_t ) sx127x_set_sleep( ( sx127x_t* ) context );
-}
+//REM APral_status_t ral_sx127x_init( const void* context )
+//REM AP{
+//REM AP   return ( ral_status_t ) sx127x_init( ( sx127x_t* ) context );
+//REM AP}
 
-ral_status_t ral_sx127x_set_standby( const void* context, ral_standby_cfg_t standby_cfg )
-{
-    // standby_cfg parameter is not supported by SX127x radios
-    return ( ral_status_t ) sx127x_set_standby( ( sx127x_t* ) context );
-}
+//REM APral_status_t ral_sx127x_wakeup( const void* context )
+//REM AP{
+//REM AP    return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP}
 
-ral_status_t ral_sx127x_set_fs( const void* context )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM APral_status_t ral_sx127x_set_sleep( const void* context, const bool retain_config )
+//REM AP{
+//REM AP    // retain_config parameter is not supported by SX127x radios
+//REM AP    return ( ral_status_t ) sx127x_set_sleep( ( sx127x_t* ) context );
+//REM AP}
 
-ral_status_t ral_sx127x_set_tx( const void* context )
-{
-    return ( ral_status_t ) sx127x_set_tx( ( sx127x_t* ) context );
-}
+//REM APral_status_t ral_sx127x_set_standby( const void* context, ral_standby_cfg_t standby_cfg )
+//REM AP{
+//REM AP    // standby_cfg parameter is not supported by SX127x radios
+//REM AP   return ( ral_status_t ) sx127x_set_standby( ( sx127x_t* ) context );
+//REM AP}
+
+//REM AP ral_status_t ral_sx127x_set_fs( const void* context )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
+
+//REM AP ral_status_t ral_sx127x_set_tx( const void* context )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_set_tx( ( sx127x_t* ) context );
+//REM AP }
 
 ral_status_t ral_sx127x_set_rx( const void* context, const uint32_t timeout_in_ms )
 {
@@ -202,41 +205,41 @@ ral_status_t ral_sx127x_set_rx( const void* context, const uint32_t timeout_in_m
     }
 }
 
-ral_status_t ral_sx127x_cfg_rx_boosted( const void* context, const bool enable_boost_mode )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_cfg_rx_boosted( const void* context, const bool enable_boost_mode )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_set_rx_tx_fallback_mode( const void* context, const ral_fallback_modes_t ral_fallback_mode )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_rx_tx_fallback_mode( const void* context, const ral_fallback_modes_t ral_fallback_mode )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_stop_timer_on_preamble( const void* context, const bool enable )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_stop_timer_on_preamble( const void* context, const bool enable )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_set_rx_duty_cycle( const void* context, const uint32_t rx_time_in_ms,
-                                           const uint32_t sleep_time_in_ms )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_rx_duty_cycle( const void* context, const uint32_t rx_time_in_ms,
+//REM AP                                            const uint32_t sleep_time_in_ms )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_set_lora_cad( const void* context )
-{
-    return ( ral_status_t ) sx127x_set_cad( ( sx127x_t* ) context );
-}
+//REM AP ral_status_t ral_sx127x_set_lora_cad( const void* context )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_set_cad( ( sx127x_t* ) context );
+//REM AP }
 
-ral_status_t ral_sx127x_set_tx_cw( const void* context )
-{
-    return ( ral_status_t ) sx127x_set_tx_cw( ( sx127x_t* ) context );
-}
+//REM AP ral_status_t ral_sx127x_set_tx_cw( const void* context )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_set_tx_cw( ( sx127x_t* ) context );
+//REM AP }
 
-ral_status_t ral_sx127x_set_tx_infinite_preamble( const void* context )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_tx_infinite_preamble( const void* context )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
 ral_status_t ral_sx127x_cal_img( const void* context, const uint16_t freq1_in_mhz, const uint16_t freq2_in_mhz )
 {
@@ -365,10 +368,10 @@ ral_status_t ral_sx127x_set_dio_irq_params( const void* context, const ral_irq_t
     return ( ral_status_t ) sx127x_set_irq_mask( ( sx127x_t* ) context, sx127x_irq );
 }
 
-ral_status_t ral_sx127x_set_rf_freq( const void* context, const uint32_t freq_in_hz )
-{
-    return ( ral_status_t ) sx127x_set_rf_freq( ( sx127x_t* ) context, freq_in_hz );
-}
+//REM AP ral_status_t ral_sx127x_set_rf_freq( const void* context, const uint32_t freq_in_hz )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_set_rf_freq( ( sx127x_t* ) context, freq_in_hz );
+//REM AP }
 
 ral_status_t ral_sx127x_set_pkt_type( const void* context, const ral_pkt_type_t pkt_type )
 {
@@ -481,24 +484,26 @@ ral_status_t ral_sx127x_set_lora_pkt_params( const void* context, const ral_lora
     return ( ral_status_t ) sx127x_set_lora_pkt_params( ( sx127x_t* ) context, &radio_pkt_params );
 }
 
-ral_status_t ral_sx127x_set_lora_cad_params( const void* context, const ral_lora_cad_params_t* params )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_lora_cad_params( const void* context, const ral_lora_cad_params_t* params )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_set_lora_symb_nb_timeout( const void* context, const uint8_t nb_of_symbs )
-{
-    return ( ral_status_t ) sx127x_set_lora_sync_timeout( ( sx127x_t* ) context, nb_of_symbs );
-}
+//REM AP ral_status_t ral_sx127x_set_lora_symb_nb_timeout( const void* context, const uint8_t nb_of_symbs )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_set_lora_sync_timeout( ( sx127x_t* ) context, nb_of_symbs );
+//REM AP }
 
-ral_status_t ral_sx127x_set_flrc_mod_params( const void* context, const ral_flrc_mod_params_t* params )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
-ral_status_t ral_sx127x_set_flrc_pkt_params( const void* context, const ral_flrc_pkt_params_t* params )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_flrc_mod_params( const void* context, const ral_flrc_mod_params_t* params )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP
+//REM AP }
+
+//REM AP ral_status_t ral_sx127x_set_flrc_pkt_params( const void* context, const ral_flrc_pkt_params_t* params )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
 ral_status_t ral_sx127x_get_gfsk_rx_pkt_status( const void* context, ral_gfsk_rx_pkt_status_t* rx_pkt_status )
 {
@@ -536,15 +541,15 @@ ral_status_t ral_sx127x_get_lora_rx_pkt_status( const void* context, ral_lora_rx
     return status;
 }
 
-ral_status_t ral_sx127x_get_flrc_rx_pkt_status( const void* context, ral_flrc_rx_pkt_status_t* rx_pkt_status )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_get_flrc_rx_pkt_status( const void* context, ral_flrc_rx_pkt_status_t* rx_pkt_status )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_get_rssi_inst( const void* context, int16_t* rssi_in_dbm )
-{
-    return ( ral_status_t ) sx127x_get_rssi_inst( ( sx127x_t* ) context, rssi_in_dbm );
-}
+//REM AP ral_status_t ral_sx127x_get_rssi_inst( const void* context, int16_t* rssi_in_dbm )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_get_rssi_inst( ( sx127x_t* ) context, rssi_in_dbm );
+//REM AP }
 
 uint32_t ral_sx127x_get_lora_time_on_air_in_ms( const ral_lora_pkt_params_t* pkt_p, const ral_lora_mod_params_t* mod_p )
 {
@@ -568,47 +573,49 @@ uint32_t ral_sx127x_get_gfsk_time_on_air_in_ms( const ral_gfsk_pkt_params_t* pkt
     return sx127x_get_gfsk_time_on_air_in_ms( &radio_pkt_params, &radio_mod_params );
 }
 
-uint32_t ral_sx127x_get_flrc_time_on_air_in_ms( const ral_flrc_pkt_params_t* pkt_p, const ral_flrc_mod_params_t* mod_p )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP uint32_t ral_sx127x_get_flrc_time_on_air_in_ms( const ral_flrc_pkt_params_t* pkt_p, const ral_flrc_mod_params_t* mod_p )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_set_gfsk_sync_word( const void* context, const uint8_t* sync_word, const uint8_t sync_word_len )
-{
-    return ( ral_status_t ) sx127x_set_gfsk_sync_word( ( sx127x_t* ) context, sync_word, sync_word_len );
-}
+//REM AP ral_status_t ral_sx127x_set_gfsk_sync_word( const void* context, const uint8_t* sync_word, const uint8_t sync_word_len )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_set_gfsk_sync_word( ( sx127x_t* ) context, sync_word, sync_word_len );
+//REM AP }
 
-ral_status_t ral_sx127x_set_lora_sync_word( const void* context, const uint8_t sync_word )
-{
-    return ( ral_status_t ) sx127x_set_lora_sync_word( ( sx127x_t* ) context, sync_word );
-}
+//REM AP ral_status_t ral_sx127x_set_lora_sync_word( const void* context, const uint8_t sync_word )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_set_lora_sync_word( ( sx127x_t* ) context, sync_word );
+//REM AP }
 
-ral_status_t ral_sx127x_set_flrc_sync_word( const void* context, const uint8_t* sync_word, const uint8_t sync_word_len )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_flrc_sync_word( const void* context, const uint8_t* sync_word, const uint8_t sync_word_len )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_set_gfsk_crc_params( const void* context, const uint16_t seed, const uint16_t polynomial )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_gfsk_crc_params( const void* context, const uint16_t seed, const uint16_t polynomial )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_set_flrc_crc_params( const void* context, const uint32_t seed )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_flrc_crc_params( const void* context, const uint32_t seed )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_set_gfsk_whitening_seed( const void* context, const uint16_t seed )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_set_gfsk_whitening_seed( const void* context, const uint16_t seed )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
+// lasciata perche chiamata forse !
 ral_status_t ral_sx127x_lr_fhss_init( const void* context, const ral_lr_fhss_params_t* lr_fhss_params )
 {
-    ( void ) context;         // Unused parameter
-    ( void ) lr_fhss_params;  // Unused parameter
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
+     ( void ) context;         // Unused parameter
+     ( void ) lr_fhss_params;  // Unused parameter
+     return RAL_STATUS_UNSUPPORTED_FEATURE;
 }
+
 
 ral_status_t ral_sx127x_lr_fhss_build_frame( const void* context, const ral_lr_fhss_params_t* lr_fhss_params,
                                              ral_lr_fhss_memory_state_t state, uint16_t hop_sequence_id,
@@ -679,29 +686,29 @@ ral_status_t ral_sx127x_get_lora_rx_pkt_cr_crc( const void* context, ral_lora_cr
     return status;
 }
 
-ral_status_t ral_sx127x_get_tx_consumption_in_ua( const void* context, const int8_t output_pwr_in_dbm,
-                                                  const uint32_t rf_freq_in_hz, uint32_t* pwr_consumption_in_ua )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_get_tx_consumption_in_ua( const void* context, const int8_t output_pwr_in_dbm,
+//REM AP                                                   const uint32_t rf_freq_in_hz, uint32_t* pwr_consumption_in_ua )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_get_gfsk_rx_consumption_in_ua( const void* context, const uint32_t br_in_bps,
-                                                       const uint32_t bw_dsb_in_hz, const bool rx_boosted,
-                                                       uint32_t* pwr_consumption_in_ua )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_get_gfsk_rx_consumption_in_ua( const void* context, const uint32_t br_in_bps,
+//REM AP                                                        const uint32_t bw_dsb_in_hz, const bool rx_boosted,
+//REM AP                                                        uint32_t* pwr_consumption_in_ua )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_get_lora_rx_consumption_in_ua( const void* context, const ral_lora_bw_t bw,
-                                                       const bool rx_boosted, uint32_t* pwr_consumption_in_ua )
-{
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
-}
+//REM AP ral_status_t ral_sx127x_get_lora_rx_consumption_in_ua( const void* context, const ral_lora_bw_t bw,
+//REM AP                                                       const bool rx_boosted, uint32_t* pwr_consumption_in_ua )
+//REM AP {
+//REM AP     return RAL_STATUS_UNSUPPORTED_FEATURE;
+//REM AP }
 
-ral_status_t ral_sx127x_get_random_numbers( const void* context, uint32_t* numbers, unsigned int n )
-{
-    return ( ral_status_t ) sx127x_get_random_numbers( ( sx127x_t* ) context, numbers, n );
-}
+//REM AP ral_status_t ral_sx127x_get_random_numbers( const void* context, uint32_t* numbers, unsigned int n )
+//REM AP {
+//REM AP     return ( ral_status_t ) sx127x_get_random_numbers( ( sx127x_t* ) context, numbers, n );
+//REM AP }
 
 /*
  * -----------------------------------------------------------------------------

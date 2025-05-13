@@ -713,7 +713,7 @@ sx127x_status_t sx127x_write_buffer( sx127x_t* radio, const uint8_t offset, cons
     {
     	//REM AP incredibile mi tocca anche di sistemare i BUG derivanti da una struttura cosi
     	//       complessa !
-    	radio->lora_pkt_params.pld_len_in_bytes = size;
+        radio->lora_pkt_params.pld_len_in_bytes = size;
 
     	// LoRa
         // Initialize payload length

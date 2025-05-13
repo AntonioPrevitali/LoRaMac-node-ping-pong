@@ -187,7 +187,9 @@ ral_status_t ral_sx127x_bsp_init( const ral_t* ral_context, radio_board_dio_irq_
     }
     radio_board_set_operating_mode( RADIO_BOARD_OP_MODE_STDBY );
 
-    return ral_init( ral_context );
+    //REM AP return ral_init( ral_context );
+
+    return sx127x_init( ral_context->context );
 }
 
 /*

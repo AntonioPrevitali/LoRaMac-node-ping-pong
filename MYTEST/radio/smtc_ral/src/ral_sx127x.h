@@ -53,6 +53,10 @@ extern "C" {
  * --- PUBLIC MACROS -----------------------------------------------------------
  */
 
+//REM AP elimino qui !
+
+/* ------
+
 #define RAL_SX127X_DRV_INSTANTIATE                                                                                    \
     {                                                                                                                 \
         .handles_part = ral_sx127x_handles_part, .reset = ral_sx127x_reset, .init = ral_sx127x_init,                  \
@@ -99,6 +103,15 @@ extern "C" {
         .context = ctx, .driver = RAL_SX127X_DRV_INSTANTIATE, \
     }
 
+----- */
+
+//REM AP quindi diventa cosi !
+
+#define RAL_SX127X_INSTANTIATE( ctx )         \
+    {                                         \
+        .context = ctx,                       \
+    }
+
 /*
  * -----------------------------------------------------------------------------
  * --- PUBLIC CONSTANTS --------------------------------------------------------
@@ -122,37 +135,37 @@ bool ral_sx127x_handles_part( const char* part_number );
 /**
  * @see ral_reset
  */
-ral_status_t ral_sx127x_reset( const void* context );
+//REM AP ral_status_t ral_sx127x_reset( const void* context );
 
 /**
  * @see ral_init
  */
-ral_status_t ral_sx127x_init( const void* context );
+//REM AP ral_status_t ral_sx127x_init( const void* context );
 
 /**
  * @see ral_wakeup
  */
-ral_status_t ral_sx127x_wakeup( const void* context );
+//REM APral_status_t ral_sx127x_wakeup( const void* context );
 
 /**
  * @see ral_set_sleep
  */
-ral_status_t ral_sx127x_set_sleep( const void* context, const bool retain_config );
+//REM AP ral_status_t ral_sx127x_set_sleep( const void* context, const bool retain_config );
 
 /**
  * @see ral_set_standby
  */
-ral_status_t ral_sx127x_set_standby( const void* context, ral_standby_cfg_t standby_cfg );
+//REM AP ral_status_t ral_sx127x_set_standby( const void* context, ral_standby_cfg_t standby_cfg );
 
 /**
  * @see ral_set_fs
  */
-ral_status_t ral_sx127x_set_fs( const void* context );
+//REM AP ral_status_t ral_sx127x_set_fs( const void* context );
 
 /**
  * @see ral_set_tx
  */
-ral_status_t ral_sx127x_set_tx( const void* context );
+//REM AP ral_status_t ral_sx127x_set_tx( const void* context );
 
 /**
  * @see ral_set_rx
@@ -162,38 +175,38 @@ ral_status_t ral_sx127x_set_rx( const void* context, const uint32_t timeout_in_m
 /**
  * @see ral_cfg_rx_boosted
  */
-ral_status_t ral_sx127x_cfg_rx_boosted( const void* context, const bool enable_boost_mode );
+//REM AP ral_status_t ral_sx127x_cfg_rx_boosted( const void* context, const bool enable_boost_mode );
 
 /**
  * @see ral_set_rx_tx_fallback_mode
  */
-ral_status_t ral_sx127x_set_rx_tx_fallback_mode( const void* context, const ral_fallback_modes_t ral_fallback_mode );
+//REM AP ral_status_t ral_sx127x_set_rx_tx_fallback_mode( const void* context, const ral_fallback_modes_t ral_fallback_mode );
 
 /**
  * @see ral_stop_timer_on_preamble
  */
-ral_status_t ral_sx127x_stop_timer_on_preamble( const void* context, const bool enable );
+//REM AP ral_status_t ral_sx127x_stop_timer_on_preamble( const void* context, const bool enable );
 
 /**
  * @see ral_set_rx_duty_cycle
  */
-ral_status_t ral_sx127x_set_rx_duty_cycle( const void* context, const uint32_t rx_time_in_ms,
-                                           const uint32_t sleep_time_in_ms );
+//REM AP ral_status_t ral_sx127x_set_rx_duty_cycle( const void* context, const uint32_t rx_time_in_ms,
+//REM AP                                            const uint32_t sleep_time_in_ms );
 
 /**
  * @see ral_set_lora_cad
  */
-ral_status_t ral_sx127x_set_lora_cad( const void* context );
+//REM AP ral_status_t ral_sx127x_set_lora_cad( const void* context );
 
 /**
  * @see ral_set_tx_cw
  */
-ral_status_t ral_sx127x_set_tx_cw( const void* context );
+//REM AP ral_status_t ral_sx127x_set_tx_cw( const void* context );
 
 /**
  * @see ral_set_tx_infinite_preamble
  */
-ral_status_t ral_sx127x_set_tx_infinite_preamble( const void* context );
+//REM AP ral_status_t ral_sx127x_set_tx_infinite_preamble( const void* context );
 
 /**
  * @see ral_cal_img
@@ -239,7 +252,7 @@ ral_status_t ral_sx127x_set_dio_irq_params( const void* context, const ral_irq_t
 /**
  * @see ral_set_rf_freq
  */
-ral_status_t ral_sx127x_set_rf_freq( const void* context, const uint32_t freq_in_hz );
+//REM AP ral_status_t ral_sx127x_set_rf_freq( const void* context, const uint32_t freq_in_hz );
 
 /**
  * @see ral_set_pkt_type
@@ -274,22 +287,22 @@ ral_status_t ral_sx127x_set_lora_pkt_params( const void* context, const ral_lora
 /**
  * @see ral_set_lora_cad_params
  */
-ral_status_t ral_sx127x_set_lora_cad_params( const void* context, const ral_lora_cad_params_t* params );
+//REM AP ral_status_t ral_sx127x_set_lora_cad_params( const void* context, const ral_lora_cad_params_t* params );
 
 /**
  * @see ral_set_lora_symb_nb_timeout
  */
-ral_status_t ral_sx127x_set_lora_symb_nb_timeout( const void* context, const uint8_t nb_of_symbs );
+//REM AP ral_status_t ral_sx127x_set_lora_symb_nb_timeout( const void* context, const uint8_t nb_of_symbs );
 
 /**
  * @see ral_set_flrc_mod_params
  */
-ral_status_t ral_sx127x_set_flrc_mod_params( const void* context, const ral_flrc_mod_params_t* params );
+//REM AP ral_status_t ral_sx127x_set_flrc_mod_params( const void* context, const ral_flrc_mod_params_t* params );
 
 /**
  * @see ral_set_flrc_pkt_params
  */
-ral_status_t ral_sx127x_set_flrc_pkt_params( const void* context, const ral_flrc_pkt_params_t* params );
+//REM AP ral_status_t ral_sx127x_set_flrc_pkt_params( const void* context, const ral_flrc_pkt_params_t* params );
 
 /**
  * @see ral_get_gfsk_rx_pkt_status
@@ -304,12 +317,12 @@ ral_status_t ral_sx127x_get_lora_rx_pkt_status( const void* context, ral_lora_rx
 /**
  * @see ral_get_flrc_rx_pkt_status
  */
-ral_status_t ral_sx127x_get_flrc_rx_pkt_status( const void* context, ral_flrc_rx_pkt_status_t* rx_pkt_status );
+//REM AP ral_status_t ral_sx127x_get_flrc_rx_pkt_status( const void* context, ral_flrc_rx_pkt_status_t* rx_pkt_status );
 
 /**
  * @see ral_get_rssi_inst
  */
-ral_status_t ral_sx127x_get_rssi_inst( const void* context, int16_t* rssi_in_dbm );
+//REM AP ral_status_t ral_sx127x_get_rssi_inst( const void* context, int16_t* rssi_in_dbm );
 
 /**
  * @see ral_get_lora_time_on_air_in_ms
@@ -326,39 +339,39 @@ uint32_t ral_sx127x_get_gfsk_time_on_air_in_ms( const ral_gfsk_pkt_params_t* pkt
 /**
  * @see ral_get_flrc_time_on_air_in_ms
  */
-uint32_t ral_sx127x_get_flrc_time_on_air_in_ms( const ral_flrc_pkt_params_t* pkt_p,
-                                                const ral_flrc_mod_params_t* mod_p );
+//REM AP uint32_t ral_sx127x_get_flrc_time_on_air_in_ms( const ral_flrc_pkt_params_t* pkt_p,
+//REM AP                                                 const ral_flrc_mod_params_t* mod_p );
 /**
  * @see ral_set_gfsk_sync_word
  */
-ral_status_t ral_sx127x_set_gfsk_sync_word( const void* context, const uint8_t* sync_word,
-                                            const uint8_t sync_word_len );
+//REM AP ral_status_t ral_sx127x_set_gfsk_sync_word( const void* context, const uint8_t* sync_word,
+//REM AP                                             const uint8_t sync_word_len );
 
 /**
  * @see ral_set_lora_sync_word
  */
-ral_status_t ral_sx127x_set_lora_sync_word( const void* context, const uint8_t sync_word );
+//REM AP ral_status_t ral_sx127x_set_lora_sync_word( const void* context, const uint8_t sync_word );
 
 /**
  * @see ral_set_flrc_sync_word
  */
-ral_status_t ral_sx127x_set_flrc_sync_word( const void* context, const uint8_t* sync_word,
-                                            const uint8_t sync_word_len );
+//REM AP ral_status_t ral_sx127x_set_flrc_sync_word( const void* context, const uint8_t* sync_word,
+//REM AP                                             const uint8_t sync_word_len );
 
 /**
  * @see ral_set_gfsk_crc_params
  */
-ral_status_t ral_sx127x_set_gfsk_crc_params( const void* context, const uint16_t seed, const uint16_t polynomial );
+//REM AP ral_status_t ral_sx127x_set_gfsk_crc_params( const void* context, const uint16_t seed, const uint16_t polynomial );
 
 /**
  * @see ral_set_flrc_crc_params
  */
-ral_status_t ral_sx127x_set_flrc_crc_params( const void* context, const uint32_t seed );
+//REM AP ral_status_t ral_sx127x_set_flrc_crc_params( const void* context, const uint32_t seed );
 
 /**
  * @see ral_set_gfsk_whitening_seed
  */
-ral_status_t ral_sx127x_set_gfsk_whitening_seed( const void* context, const uint16_t seed );
+//REM AP ral_status_t ral_sx127x_set_gfsk_whitening_seed( const void* context, const uint16_t seed );
 
 /**
  * @see ral_lr_fhss_init
@@ -404,26 +417,26 @@ ral_status_t ral_sx127x_get_lora_rx_pkt_cr_crc( const void* context, ral_lora_cr
 /**
  * @see ral_get_tx_consumption_in_ua
  */
-ral_status_t ral_sx127x_get_tx_consumption_in_ua( const void* context, const int8_t output_pwr_in_dbm,
-                                                  const uint32_t rf_freq_in_hz, uint32_t* pwr_consumption_in_ua );
+//REM AP ral_status_t ral_sx127x_get_tx_consumption_in_ua( const void* context, const int8_t output_pwr_in_dbm,
+//REM AP                                                   const uint32_t rf_freq_in_hz, uint32_t* pwr_consumption_in_ua );
 
 /**
  * @see ral_get_gfsk_rx_consumption_in_ua
  */
-ral_status_t ral_sx127x_get_gfsk_rx_consumption_in_ua( const void* context, const uint32_t br_in_bps,
-                                                       const uint32_t bw_dsb_in_hz, const bool rx_boosted,
-                                                       uint32_t* pwr_consumption_in_ua );
+//REM AP ral_status_t ral_sx127x_get_gfsk_rx_consumption_in_ua( const void* context, const uint32_t br_in_bps,
+//REM AP                                                        const uint32_t bw_dsb_in_hz, const bool rx_boosted,
+//REM AP                                                        uint32_t* pwr_consumption_in_ua );
 
 /**
  * @see ral_get_lora_rx_consumption_in_ua
  */
-ral_status_t ral_sx127x_get_lora_rx_consumption_in_ua( const void* context, const ral_lora_bw_t bw,
-                                                       const bool rx_boosted, uint32_t* pwr_consumption_in_ua );
+//REM AP ral_status_t ral_sx127x_get_lora_rx_consumption_in_ua( const void* context, const ral_lora_bw_t bw,
+//REM AP                                                        const bool rx_boosted, uint32_t* pwr_consumption_in_ua );
 
 /**
  * @see ral_get_random_numbers
  */
-ral_status_t ral_sx127x_get_random_numbers( const void* context, uint32_t* numbers, unsigned int n );
+//REM AP ral_status_t ral_sx127x_get_random_numbers( const void* context, uint32_t* numbers, unsigned int n );
 
 #ifdef __cplusplus
 }

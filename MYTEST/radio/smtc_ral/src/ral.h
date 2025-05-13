@@ -66,13 +66,18 @@ extern "C" {
 typedef struct ral_s
 {
     const void* context;
-    ral_drv_t   driver;
+    //REM AP ral_drv_t   driver;
 } ral_t;
 
 /*
  * -----------------------------------------------------------------------------
  * --- PUBLIC FUNCTIONS PROTOTYPES ---------------------------------------------
  */
+
+
+//REM AP TOLTE TUTTE QUESTE FUNZIONI E modifciato le chimate tramite driver tutte andavano
+//                                   sulle corrispondenti ral_sx127x_nomefunzione...
+
 
 /**
  * @brief Indicate whether the radio driver is capable of driving a specific part number
@@ -81,10 +86,11 @@ typedef struct ral_s
  *
  * @returns true, if the driver is capable of driving part part_number
  */
-static inline bool ral_handles_part( const ral_t* radio, const char* part_number )
-{
-    return radio->driver.handles_part( part_number );
-}
+//REM AP static inline bool ral_handles_part( const ral_t* radio, const char* part_number )
+//REM AP {
+//REM AP     return radio->driver.handles_part( part_number );
+//REM AP            questa chiamava la ral_sx127x_handles_part
+//REM AP }
 
 /**
  * @brief Reset the radio
@@ -95,10 +101,10 @@ static inline bool ral_handles_part( const ral_t* radio, const char* part_number
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_reset( const ral_t* radio )
-{
-    return radio->driver.reset( radio->context );
-}
+//REM AP static inline ral_status_t ral_reset( const ral_t* radio )
+//REM AP {
+//REM AP     return radio->driver.reset( radio->context );
+//REM AP }
 
 /**
  * @brief Initialize the radio
@@ -109,10 +115,10 @@ static inline ral_status_t ral_reset( const ral_t* radio )
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_init( const ral_t* radio )
-{
-    return radio->driver.init( radio->context );
-}
+//REM AP static inline ral_status_t ral_init( const ral_t* radio )
+//REM AP {
+//REM AP     return radio->driver.init( radio->context );
+//REM AP }
 
 /**
  * @brief Wake up the radio from sleep
@@ -121,10 +127,10 @@ static inline ral_status_t ral_init( const ral_t* radio )
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_wakeup( const ral_t* radio )
-{
-    return radio->driver.wakeup( radio->context );
-}
+//REM AP static inline ral_status_t ral_wakeup( const ral_t* radio )
+//REM AP {
+//REM AP     return radio->driver.wakeup( radio->context );
+//REM AP }
 
 /**
  * @brief Set the radio in sleep mode
@@ -134,10 +140,10 @@ static inline ral_status_t ral_wakeup( const ral_t* radio )
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_sleep( const ral_t* radio, const bool retain_config )
-{
-    return radio->driver.set_sleep( radio->context, retain_config );
-}
+//REM AP static inline ral_status_t ral_set_sleep( const ral_t* radio, const bool retain_config )
+//REM AP {
+//REM AP     return radio->driver.set_sleep( radio->context, retain_config );
+//REM AP }
 
 /**
  * @brief Set the chip in stand-by mode
@@ -147,10 +153,10 @@ static inline ral_status_t ral_set_sleep( const ral_t* radio, const bool retain_
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_standby( const ral_t* radio, ral_standby_cfg_t standby_cfg )
-{
-    return radio->driver.set_standby( radio->context, standby_cfg );
-}
+//REM AP static inline ral_status_t ral_set_standby( const ral_t* radio, ral_standby_cfg_t standby_cfg )
+//REM AP {
+//REM AP     return radio->driver.set_standby( radio->context, standby_cfg );
+//REM AP }
 
 /**
  * @brief Set the chip in frequency synthesis mode
@@ -159,10 +165,10 @@ static inline ral_status_t ral_set_standby( const ral_t* radio, ral_standby_cfg_
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_fs( const ral_t* radio )
-{
-    return radio->driver.set_fs( radio->context );
-}
+//REM AP static inline ral_status_t ral_set_fs( const ral_t* radio )
+//REM AP {
+//REM AP     return radio->driver.set_fs( radio->context );
+//REM AP }
 
 /**
  * @brief Set the chip in transmission mode
@@ -171,10 +177,10 @@ static inline ral_status_t ral_set_fs( const ral_t* radio )
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_tx( const ral_t* radio )
-{
-    return radio->driver.set_tx( radio->context );
-}
+//REM AP static inline ral_status_t ral_set_tx( const ral_t* radio )
+//REM AP {
+//REM AP     return radio->driver.set_tx( radio->context );
+//REM AP }
 
 /**
  * @brief Set the chip in reception mode
@@ -184,10 +190,10 @@ static inline ral_status_t ral_set_tx( const ral_t* radio )
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_rx( const ral_t* radio, const uint32_t timeout_in_ms )
-{
-    return radio->driver.set_rx( radio->context, timeout_in_ms );
-}
+//REM AP static inline ral_status_t ral_set_rx( const ral_t* radio, const uint32_t timeout_in_ms )
+//REM AP {
+//REM AP     return radio->driver.set_rx( radio->context, timeout_in_ms );
+//REM AP }
 
 /**
  * @brief Configure the boost mode in reception
@@ -197,10 +203,10 @@ static inline ral_status_t ral_set_rx( const ral_t* radio, const uint32_t timeou
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_cfg_rx_boosted( const ral_t* radio, const bool enable_boost_mode )
-{
-    return radio->driver.cfg_rx_boosted( radio->context, enable_boost_mode );
-}
+//REM AP static inline ral_status_t ral_cfg_rx_boosted( const ral_t* radio, const bool enable_boost_mode )
+//REM AP {
+//REM AP     return radio->driver.cfg_rx_boosted( radio->context, enable_boost_mode );
+//REM AP }
 
 /**
  * @brief Set chip mode to be used after successful transmission or reception.
@@ -212,10 +218,10 @@ static inline ral_status_t ral_cfg_rx_boosted( const ral_t* radio, const bool en
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_rx_tx_fallback_mode( const ral_t* radio, const ral_fallback_modes_t fallback_mode )
-{
-    return radio->driver.set_rx_tx_fallback_mode( radio->context, fallback_mode );
-}
+//REM AP static inline ral_status_t ral_set_rx_tx_fallback_mode( const ral_t* radio, const ral_fallback_modes_t fallback_mode )
+//REM AP {
+//REM AP     return radio->driver.set_rx_tx_fallback_mode( radio->context, fallback_mode );
+//REM AP }
 
 /**
  * @brief Configure the event on which the Rx timeout is stopped
@@ -229,10 +235,10 @@ static inline ral_status_t ral_set_rx_tx_fallback_mode( const ral_t* radio, cons
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_stop_timer_on_preamble( const ral_t* radio, const bool enable )
-{
-    return radio->driver.stop_timer_on_preamble( radio->context, enable );
-}
+//REM AP static inline ral_status_t ral_stop_timer_on_preamble( const ral_t* radio, const bool enable )
+//REM AP {
+//REM AP     return radio->driver.stop_timer_on_preamble( radio->context, enable );
+//REM AP }
 
 /**
  * @brief Set the chip in reception mode with duty cycling
@@ -243,11 +249,11 @@ static inline ral_status_t ral_stop_timer_on_preamble( const ral_t* radio, const
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_rx_duty_cycle( const ral_t* radio, const uint32_t rx_time_in_ms,
-                                                  const uint32_t sleep_time_in_ms )
-{
-    return radio->driver.set_rx_duty_cycle( radio->context, rx_time_in_ms, sleep_time_in_ms );
-}
+//REM AP static inline ral_status_t ral_set_rx_duty_cycle( const ral_t* radio, const uint32_t rx_time_in_ms,
+//REM AP                                                   const uint32_t sleep_time_in_ms )
+//REM AP {
+//REM AP     return radio->driver.set_rx_duty_cycle( radio->context, rx_time_in_ms, sleep_time_in_ms );
+//REM AP }
 
 /**
  * @brief Set the chip in LoRa CAD (Channel Activity Detection) mode
@@ -258,10 +264,10 @@ static inline ral_status_t ral_set_rx_duty_cycle( const ral_t* radio, const uint
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_lora_cad( const ral_t* radio )
-{
-    return radio->driver.set_lora_cad( radio->context );
-}
+//REM AP static inline ral_status_t ral_set_lora_cad( const ral_t* radio )
+//REM AP {
+//REM AP     return radio->driver.set_lora_cad( radio->context );
+//REM AP }
 
 /**
  * @brief Set the chip in Tx continuous wave (RF tone).
@@ -272,10 +278,10 @@ static inline ral_status_t ral_set_lora_cad( const ral_t* radio )
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_tx_cw( const ral_t* radio )
-{
-    return radio->driver.set_tx_cw( radio->context );
-}
+//REM AP static inline ral_status_t ral_set_tx_cw( const ral_t* radio )
+//REM AP {
+//REM AP     return radio->driver.set_tx_cw( radio->context );
+//REM AP }
 
 /**
  * @brief Set the chip in Tx infinite preamble (modulated signal).
@@ -286,10 +292,10 @@ static inline ral_status_t ral_set_tx_cw( const ral_t* radio )
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_tx_infinite_preamble( const ral_t* radio )
-{
-    return radio->driver.set_tx_infinite_preamble( radio->context );
-}
+//REM AP static inline ral_status_t ral_set_tx_infinite_preamble( const ral_t* radio )
+//REM AP {
+//REM AP     return radio->driver.set_tx_infinite_preamble( radio->context );
+//REM AP }
 
 /**
  * @brief Launch a band image rejection calibration valid for all frequencies inside an interval, in MHz
@@ -300,10 +306,10 @@ static inline ral_status_t ral_set_tx_infinite_preamble( const ral_t* radio )
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_cal_img( const ral_t* radio, const uint16_t freq1_in_mhz, const uint16_t freq2_in_mhz )
-{
-    return radio->driver.cal_img( radio->context, freq1_in_mhz, freq2_in_mhz );
-}
+//REM AP static inline ral_status_t ral_cal_img( const ral_t* radio, const uint16_t freq1_in_mhz, const uint16_t freq2_in_mhz )
+//REM AP {
+//REM AP     return radio->driver.cal_img( radio->context, freq1_in_mhz, freq2_in_mhz );
+//REM AP }
 
 /**
  * @brief Configure the transmission-related parameters
@@ -316,11 +322,11 @@ static inline ral_status_t ral_cal_img( const ral_t* radio, const uint16_t freq1
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_tx_cfg( const ral_t* radio, const int8_t output_pwr_in_dbm,
-                                           const uint32_t rf_freq_in_hz )
-{
-    return radio->driver.set_tx_cfg( radio->context, output_pwr_in_dbm, rf_freq_in_hz );
-}
+//REM AP static inline ral_status_t ral_set_tx_cfg( const ral_t* radio, const int8_t output_pwr_in_dbm,
+//REM AP                                            const uint32_t rf_freq_in_hz )
+//REM AP {
+//REM AP     return radio->driver.set_tx_cfg( radio->context, output_pwr_in_dbm, rf_freq_in_hz );
+//REM AP }
 
 /**
  * @brief Fill the radio transmission buffer with data
@@ -331,10 +337,10 @@ static inline ral_status_t ral_set_tx_cfg( const ral_t* radio, const int8_t outp
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_pkt_payload( const ral_t* radio, const uint8_t* buffer, const uint16_t size )
-{
-    return radio->driver.set_pkt_payload( radio->context, buffer, size );
-}
+//REM AP static inline ral_status_t ral_set_pkt_payload( const ral_t* radio, const uint8_t* buffer, const uint16_t size )
+//REM AP {
+//REM AP     return radio->driver.set_pkt_payload( radio->context, buffer, size );
+//REM AP }
 
 /**
  * @brief Fetch data from the radio reception buffer
@@ -346,11 +352,11 @@ static inline ral_status_t ral_set_pkt_payload( const ral_t* radio, const uint8_
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_pkt_payload( const ral_t* radio, uint16_t max_size_in_bytes, uint8_t* buffer,
-                                                uint16_t* size_in_bytes )
-{
-    return radio->driver.get_pkt_payload( radio->context, max_size_in_bytes, buffer, size_in_bytes );
-}
+//REM AP static inline ral_status_t ral_get_pkt_payload( const ral_t* radio, uint16_t max_size_in_bytes, uint8_t* buffer,
+//REM AP                                                 uint16_t* size_in_bytes )
+//REM AP {
+//REM AP     return radio->driver.get_pkt_payload( radio->context, max_size_in_bytes, buffer, size_in_bytes );
+//REM AP }
 
 /**
  * @brief Get the current radio irq status
@@ -360,10 +366,10 @@ static inline ral_status_t ral_get_pkt_payload( const ral_t* radio, uint16_t max
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_irq_status( const ral_t* radio, ral_irq_t* irq )
-{
-    return radio->driver.get_irq_status( radio->context, irq );
-}
+//REM AP static inline ral_status_t ral_get_irq_status( const ral_t* radio, ral_irq_t* irq )
+//REM AP {
+//REM AP     return radio->driver.get_irq_status( radio->context, irq );
+//REM AP }
 
 /**
  * @brief Clear radio irq status
@@ -373,10 +379,10 @@ static inline ral_status_t ral_get_irq_status( const ral_t* radio, ral_irq_t* ir
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_clear_irq_status( const ral_t* radio, const ral_irq_t irq )
-{
-    return radio->driver.clear_irq_status( radio->context, irq );
-}
+//REM AP static inline ral_status_t ral_clear_irq_status( const ral_t* radio, const ral_irq_t irq )
+//REM AP {
+//REM AP     return radio->driver.clear_irq_status( radio->context, irq );
+//REM AP }
 
 /**
  * @brief Clear any radio irq status flags that are set and returns the flags that were cleared
@@ -386,10 +392,10 @@ static inline ral_status_t ral_clear_irq_status( const ral_t* radio, const ral_i
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_and_clear_irq_status( const ral_t* radio, ral_irq_t* irq )
-{
-    return radio->driver.get_and_clear_irq_status( radio->context, irq );
-}
+//REM AP static inline ral_status_t ral_get_and_clear_irq_status( const ral_t* radio, ral_irq_t* irq )
+//REM AP {
+//REM AP     return radio->driver.get_and_clear_irq_status( radio->context, irq );
+//REM AP }
 
 /**
  * @brief Enable interrupts. If the chip has several IRQ lines, the first is used.
@@ -399,10 +405,10 @@ static inline ral_status_t ral_get_and_clear_irq_status( const ral_t* radio, ral
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_dio_irq_params( const ral_t* radio, const ral_irq_t irq )
-{
-    return radio->driver.set_dio_irq_params( radio->context, irq );
-}
+//REM AP static inline ral_status_t ral_set_dio_irq_params( const ral_t* radio, const ral_irq_t irq )
+//REM AP {
+//REM AP     return radio->driver.set_dio_irq_params( radio->context, irq );
+//REM AP }
 
 /**
  * @brief Set the RF frequency for future radio operations
@@ -412,10 +418,10 @@ static inline ral_status_t ral_set_dio_irq_params( const ral_t* radio, const ral
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_rf_freq( const ral_t* radio, const uint32_t freq_in_hz )
-{
-    return radio->driver.set_rf_freq( radio->context, freq_in_hz );
-}
+//REM AP static inline ral_status_t ral_set_rf_freq( const ral_t* radio, const uint32_t freq_in_hz )
+//REM AP {
+//REM AP     return radio->driver.set_rf_freq( radio->context, freq_in_hz );
+//REM AP }
 
 /**
  * @brief Set the packet type
@@ -425,10 +431,10 @@ static inline ral_status_t ral_set_rf_freq( const ral_t* radio, const uint32_t f
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_pkt_type( const ral_t* radio, const ral_pkt_type_t pkt_type )
-{
-    return radio->driver.set_pkt_type( radio->context, pkt_type );
-}
+//REM AP static inline ral_status_t ral_set_pkt_type( const ral_t* radio, const ral_pkt_type_t pkt_type )
+//REM AP {
+//REM AP     return radio->driver.set_pkt_type( radio->context, pkt_type );
+//REM AP }
 
 /**
  * @brief Get the current packet type
@@ -438,10 +444,10 @@ static inline ral_status_t ral_set_pkt_type( const ral_t* radio, const ral_pkt_t
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_pkt_type( const ral_t* radio, ral_pkt_type_t* pkt_type )
-{
-    return radio->driver.get_pkt_type( radio->context, pkt_type );
-}
+//REM AP static inline ral_status_t ral_get_pkt_type( const ral_t* radio, ral_pkt_type_t* pkt_type )
+//REM AP {
+//REM AP     return radio->driver.get_pkt_type( radio->context, pkt_type );
+//REM AP }
 
 /**
  * @brief Set the modulation parameters for GFSK packets
@@ -453,10 +459,10 @@ static inline ral_status_t ral_get_pkt_type( const ral_t* radio, ral_pkt_type_t*
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_gfsk_mod_params( const ral_t* radio, const ral_gfsk_mod_params_t* params )
-{
-    return radio->driver.set_gfsk_mod_params( radio->context, params );
-}
+//REM AP static inline ral_status_t ral_set_gfsk_mod_params( const ral_t* radio, const ral_gfsk_mod_params_t* params )
+//REM AP {
+//REM AP     return radio->driver.set_gfsk_mod_params( radio->context, params );
+//REM AP }
 
 /**
  * @brief Set the packet parameters for GFSK packets
@@ -468,10 +474,10 @@ static inline ral_status_t ral_set_gfsk_mod_params( const ral_t* radio, const ra
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_gfsk_pkt_params( const ral_t* radio, const ral_gfsk_pkt_params_t* params )
-{
-    return radio->driver.set_gfsk_pkt_params( radio->context, params );
-}
+//REM APstatic inline ral_status_t ral_set_gfsk_pkt_params( const ral_t* radio, const ral_gfsk_pkt_params_t* params )
+//REM AP{
+//REM AP    return radio->driver.set_gfsk_pkt_params( radio->context, params );
+//REM AP}
 
 /**
  * @brief Set the modulation parameters for LoRa packets
@@ -483,10 +489,10 @@ static inline ral_status_t ral_set_gfsk_pkt_params( const ral_t* radio, const ra
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_lora_mod_params( const ral_t* radio, const ral_lora_mod_params_t* params )
-{
-    return radio->driver.set_lora_mod_params( radio->context, params );
-}
+//REM APstatic inline ral_status_t ral_set_lora_mod_params( const ral_t* radio, const ral_lora_mod_params_t* params )
+//REM AP{
+//REM AP    return radio->driver.set_lora_mod_params( radio->context, params );
+//REM AP}
 
 /**
  * @brief Set the packet parameters for LoRa packets
@@ -498,10 +504,10 @@ static inline ral_status_t ral_set_lora_mod_params( const ral_t* radio, const ra
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_lora_pkt_params( const ral_t* radio, const ral_lora_pkt_params_t* params )
-{
-    return radio->driver.set_lora_pkt_params( radio->context, params );
-}
+//REM APstatic inline ral_status_t ral_set_lora_pkt_params( const ral_t* radio, const ral_lora_pkt_params_t* params )
+//REM AP{
+//REM AP    return radio->driver.set_lora_pkt_params( radio->context, params );
+//REM AP}
 
 /**
  * @brief Set the parameters for LoRa CAD operation
@@ -513,10 +519,10 @@ static inline ral_status_t ral_set_lora_pkt_params( const ral_t* radio, const ra
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_lora_cad_params( const ral_t* radio, const ral_lora_cad_params_t* params )
-{
-    return radio->driver.set_lora_cad_params( radio->context, params );
-}
+//REM APstatic inline ral_status_t ral_set_lora_cad_params( const ral_t* radio, const ral_lora_cad_params_t* params )
+//REM AP{
+//REM AP    return radio->driver.set_lora_cad_params( radio->context, params );
+//REM AP}
 
 /**
  * @brief Configure the LoRa modem to issue a RX timeout after an exact number
@@ -527,10 +533,10 @@ static inline ral_status_t ral_set_lora_cad_params( const ral_t* radio, const ra
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_lora_symb_nb_timeout( const ral_t* radio, const uint8_t nb_of_symbs )
-{
-    return radio->driver.set_lora_symb_nb_timeout( radio->context, nb_of_symbs );
-}
+//REM APstatic inline ral_status_t ral_set_lora_symb_nb_timeout( const ral_t* radio, const uint8_t nb_of_symbs )
+//REM AP{
+//REM AP    return radio->driver.set_lora_symb_nb_timeout( radio->context, nb_of_symbs );
+//REM AP}
 
 /**
  * @brief Set the modulation parameters for FLRC packets
@@ -542,10 +548,10 @@ static inline ral_status_t ral_set_lora_symb_nb_timeout( const ral_t* radio, con
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_flrc_mod_params( const ral_t* radio, const ral_flrc_mod_params_t* params )
-{
-    return radio->driver.set_flrc_mod_params( radio->context, params );
-}
+//REM APstatic inline ral_status_t ral_set_flrc_mod_params( const ral_t* radio, const ral_flrc_mod_params_t* params )
+//REM AP{
+//REM AP    return radio->driver.set_flrc_mod_params( radio->context, params );
+//REM AP}
 
 /**
  * @brief Set the packet parameters for FLRC packets
@@ -557,10 +563,10 @@ static inline ral_status_t ral_set_flrc_mod_params( const ral_t* radio, const ra
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_flrc_pkt_params( const ral_t* radio, const ral_flrc_pkt_params_t* params )
-{
-    return radio->driver.set_flrc_pkt_params( radio->context, params );
-}
+//REM APstatic inline ral_status_t ral_set_flrc_pkt_params( const ral_t* radio, const ral_flrc_pkt_params_t* params )
+//REM AP{
+//REM AP    return radio->driver.set_flrc_pkt_params( radio->context, params );
+//REM AP}
 
 /**
  * @brief Get the status of the last GFSK packet received
@@ -570,10 +576,10 @@ static inline ral_status_t ral_set_flrc_pkt_params( const ral_t* radio, const ra
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_gfsk_rx_pkt_status( const ral_t* radio, ral_gfsk_rx_pkt_status_t* rx_pkt_status )
-{
-    return radio->driver.get_gfsk_rx_pkt_status( radio->context, rx_pkt_status );
-}
+//REM APstatic inline ral_status_t ral_get_gfsk_rx_pkt_status( const ral_t* radio, ral_gfsk_rx_pkt_status_t* rx_pkt_status )
+//REM AP{
+//REM AP    return radio->driver.get_gfsk_rx_pkt_status( radio->context, rx_pkt_status );
+//REM AP}
 
 /**
  * @brief Get the status of the last LoRa packet received
@@ -583,10 +589,10 @@ static inline ral_status_t ral_get_gfsk_rx_pkt_status( const ral_t* radio, ral_g
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_lora_rx_pkt_status( const ral_t* radio, ral_lora_rx_pkt_status_t* rx_pkt_status )
-{
-    return radio->driver.get_lora_rx_pkt_status( radio->context, rx_pkt_status );
-}
+//REM APstatic inline ral_status_t ral_get_lora_rx_pkt_status( const ral_t* radio, ral_lora_rx_pkt_status_t* rx_pkt_status )
+//REM AP{
+//REM AP    return radio->driver.get_lora_rx_pkt_status( radio->context, rx_pkt_status );
+//REM AP}
 
 /**
  * @brief Get the status of the last FLRC packet received
@@ -596,10 +602,10 @@ static inline ral_status_t ral_get_lora_rx_pkt_status( const ral_t* radio, ral_l
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_flrc_rx_pkt_status( const ral_t* radio, ral_flrc_rx_pkt_status_t* rx_pkt_status )
-{
-    return radio->driver.get_flrc_rx_pkt_status( radio->context, rx_pkt_status );
-}
+//REM APstatic inline ral_status_t ral_get_flrc_rx_pkt_status( const ral_t* radio, ral_flrc_rx_pkt_status_t* rx_pkt_status )
+//REM AP{
+//REM AP   return radio->driver.get_flrc_rx_pkt_status( radio->context, rx_pkt_status );
+//REM AP}
 
 /**
  * @brief Get the instantaneous RSSI value.
@@ -611,10 +617,10 @@ static inline ral_status_t ral_get_flrc_rx_pkt_status( const ral_t* radio, ral_f
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_rssi_inst( const ral_t* radio, int16_t* rssi_in_dbm )
-{
-    return radio->driver.get_rssi_inst( radio->context, rssi_in_dbm );
-}
+//REM APstatic inline ral_status_t ral_get_rssi_inst( const ral_t* radio, int16_t* rssi_in_dbm )
+//REM AP{
+//REM AP    return radio->driver.get_rssi_inst( radio->context, rssi_in_dbm );
+//REM AP}
 
 /**
  * @brief Get the time on air in ms for LoRa transmission
@@ -624,11 +630,11 @@ static inline ral_status_t ral_get_rssi_inst( const ral_t* radio, int16_t* rssi_
  *
  * @returns Time-on-air value in ms for LoRa transmission
  */
-static inline uint32_t ral_get_lora_time_on_air_in_ms( const ral_t* radio, const ral_lora_pkt_params_t* pkt_p,
-                                                       const ral_lora_mod_params_t* mod_p )
-{
-    return radio->driver.get_lora_time_on_air_in_ms( pkt_p, mod_p );
-}
+//REM APstatic inline uint32_t ral_get_lora_time_on_air_in_ms( const ral_t* radio, const ral_lora_pkt_params_t* pkt_p,
+//REM AP                                                       const ral_lora_mod_params_t* mod_p )
+//REM AP{
+//REM AP    return radio->driver.get_lora_time_on_air_in_ms( pkt_p, mod_p );
+//REM AP}
 
 /**
  * @brief Get the time on air in millisecond for GFSK transmission
@@ -638,11 +644,11 @@ static inline uint32_t ral_get_lora_time_on_air_in_ms( const ral_t* radio, const
  *
  * @returns Time-on-air value in ms for GFSK transmission
  */
-static inline uint32_t ral_get_gfsk_time_on_air_in_ms( const ral_t* radio, const ral_gfsk_pkt_params_t* pkt_p,
-                                                       const ral_gfsk_mod_params_t* mod_p )
-{
-    return radio->driver.get_gfsk_time_on_air_in_ms( pkt_p, mod_p );
-}
+//REM APstatic inline uint32_t ral_get_gfsk_time_on_air_in_ms( const ral_t* radio, const ral_gfsk_pkt_params_t* pkt_p,
+//REM AP                                                       const ral_gfsk_mod_params_t* mod_p )
+//REM AP{
+//REM AP    return radio->driver.get_gfsk_time_on_air_in_ms( pkt_p, mod_p );
+//REM AP}
 
 /**
  * @brief Get the time on air in millisecond for FLRC transmission
@@ -652,11 +658,11 @@ static inline uint32_t ral_get_gfsk_time_on_air_in_ms( const ral_t* radio, const
  *
  * @returns Time-on-air value in ms for FLRC transmission
  */
-static inline uint32_t ral_get_flrc_time_on_air_in_ms( const ral_t* radio, const ral_flrc_pkt_params_t* pkt_p,
-                                                       const ral_flrc_mod_params_t* mod_p )
-{
-    return radio->driver.get_flrc_time_on_air_in_ms( pkt_p, mod_p );
-}
+//REM APstatic inline uint32_t ral_get_flrc_time_on_air_in_ms( const ral_t* radio, const ral_flrc_pkt_params_t* pkt_p,
+//REM AP                                                      const ral_flrc_mod_params_t* mod_p )
+//REM AP{
+//REM AP    return radio->driver.get_flrc_time_on_air_in_ms( pkt_p, mod_p );
+//REM AP
 
 /**
  * @brief Configure the sync word used in GFSK packet
@@ -667,11 +673,11 @@ static inline uint32_t ral_get_flrc_time_on_air_in_ms( const ral_t* radio, const
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_gfsk_sync_word( const ral_t* radio, const uint8_t* sync_word,
-                                                   const uint8_t sync_word_len )
-{
-    return radio->driver.set_gfsk_sync_word( radio->context, sync_word, sync_word_len );
-}
+//REM APstatic inline ral_status_t ral_set_gfsk_sync_word( const ral_t* radio, const uint8_t* sync_word,
+//REM AP                                                   const uint8_t sync_word_len )
+//REM AP{
+//REM AP    return radio->driver.set_gfsk_sync_word( radio->context, sync_word, sync_word_len );
+//REM AP}
 
 /**
  * @brief Configure the sync word used in LoRa packet
@@ -685,10 +691,10 @@ static inline ral_status_t ral_set_gfsk_sync_word( const ral_t* radio, const uin
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_lora_sync_word( const ral_t* radio, const uint8_t sync_word )
-{
-    return radio->driver.set_lora_sync_word( radio->context, sync_word );
-}
+//REM APstatic inline ral_status_t ral_set_lora_sync_word( const ral_t* radio, const uint8_t sync_word )
+//REM AP{
+//REM AP    return radio->driver.set_lora_sync_word( radio->context, sync_word );
+//REM AP}
 
 /**
  * @brief Configure the sync word used in FLRC packet
@@ -699,11 +705,11 @@ static inline ral_status_t ral_set_lora_sync_word( const ral_t* radio, const uin
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_flrc_sync_word( const ral_t* radio, const uint8_t* sync_word,
-                                                   const uint8_t sync_word_len )
-{
-    return radio->driver.set_flrc_sync_word( radio->context, sync_word, sync_word_len );
-}
+//REM APstatic inline ral_status_t ral_set_flrc_sync_word( const ral_t* radio, const uint8_t* sync_word,
+//REM AP                                                   const uint8_t sync_word_len )
+//REM AP{
+//REM AP    return radio->driver.set_flrc_sync_word( radio->context, sync_word, sync_word_len );
+//REM AP}
 
 /**
  * @brief Configure the seed used to compute CRC in GFSK packet
@@ -714,10 +720,10 @@ static inline ral_status_t ral_set_flrc_sync_word( const ral_t* radio, const uin
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_gfsk_crc_params( const ral_t* radio, const uint16_t seed, const uint16_t polynomial )
-{
-    return radio->driver.set_gfsk_crc_params( radio->context, seed, polynomial );
-}
+//REM APstatic inline ral_status_t ral_set_gfsk_crc_params( const ral_t* radio, const uint16_t seed, const uint16_t polynomial )
+//REM AP{
+//REM AP    return radio->driver.set_gfsk_crc_params( radio->context, seed, polynomial );
+//REM AP}
 
 /**
  * @brief Configure the seed used to compute the CRC for FLRC packets
@@ -727,10 +733,10 @@ static inline ral_status_t ral_set_gfsk_crc_params( const ral_t* radio, const ui
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_flrc_crc_params( const ral_t* radio, const uint32_t seed )
-{
-    return radio->driver.set_flrc_crc_params( radio->context, seed );
-}
+//REM APstatic inline ral_status_t ral_set_flrc_crc_params( const ral_t* radio, const uint32_t seed )
+//REM AP{
+//REM AP    return radio->driver.set_flrc_crc_params( radio->context, seed );
+//REM AP}
 
 /**
  * @brief Configure the whitening seed used in GFSK packet
@@ -740,10 +746,10 @@ static inline ral_status_t ral_set_flrc_crc_params( const ral_t* radio, const ui
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_set_gfsk_whitening_seed( const ral_t* radio, const uint16_t seed )
-{
-    return radio->driver.set_gfsk_whitening_seed( radio->context, seed );
-}
+//REM APstatic inline ral_status_t ral_set_gfsk_whitening_seed( const ral_t* radio, const uint16_t seed )
+//REM AP{
+//REM AP   return radio->driver.set_gfsk_whitening_seed( radio->context, seed );
+//REM AP}
 
 /**
  * @brief Initialise LR FHSS
@@ -753,10 +759,10 @@ static inline ral_status_t ral_set_gfsk_whitening_seed( const ral_t* radio, cons
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_lr_fhss_init( const ral_t* radio, const ral_lr_fhss_params_t* lr_fhss_params )
-{
-    return radio->driver.lr_fhss_init( radio->context, lr_fhss_params );
-}
+//REM APstatic inline ral_status_t ral_lr_fhss_init( const ral_t* radio, const ral_lr_fhss_params_t* lr_fhss_params )
+//REM AP{
+//REM AP    return radio->driver.lr_fhss_init( radio->context, lr_fhss_params );
+//REM AP}
 
 /**
  * @brief Build frame for LR FHSS operation
@@ -770,14 +776,14 @@ static inline ral_status_t ral_lr_fhss_init( const ral_t* radio, const ral_lr_fh
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_lr_fhss_build_frame( const ral_t* radio, const ral_lr_fhss_params_t* lr_fhss_params,
-                                                    ral_lr_fhss_memory_state_t memory_state_holder,
-                                                    uint16_t hop_sequence_id, const uint8_t* payload,
-                                                    uint16_t payload_length )
-{
-    return radio->driver.lr_fhss_build_frame( radio->context, lr_fhss_params, memory_state_holder, hop_sequence_id,
-                                              payload, payload_length );
-}
+//REM APstatic inline ral_status_t ral_lr_fhss_build_frame( const ral_t* radio, const ral_lr_fhss_params_t* lr_fhss_params,
+//REM AP                                                    ral_lr_fhss_memory_state_t memory_state_holder,
+//REM AP                                                    uint16_t hop_sequence_id, const uint8_t* payload,
+//REM AP                                                    uint16_t payload_length )
+//REM AP{
+//REM AP    return radio->driver.lr_fhss_build_frame( radio->context, lr_fhss_params, memory_state_holder, hop_sequence_id,
+//REM AP                                              payload, payload_length );
+//REM AP}
 
 /**
  * @brief Handle HOP for LR FHSS operation
@@ -788,11 +794,11 @@ static inline ral_status_t ral_lr_fhss_build_frame( const ral_t* radio, const ra
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_lr_fhss_handle_hop( const ral_t* radio, const ral_lr_fhss_params_t* lr_fhss_params,
-                                                   ral_lr_fhss_memory_state_t memory_state_holder )
-{
-    return radio->driver.lr_fhss_handle_hop( radio->context, lr_fhss_params, memory_state_holder );
-}
+//REM APstatic inline ral_status_t ral_lr_fhss_handle_hop( const ral_t* radio, const ral_lr_fhss_params_t* lr_fhss_params,
+//REM AP                                                   ral_lr_fhss_memory_state_t memory_state_holder )
+//REM AP{
+//REM AP    return radio->driver.lr_fhss_handle_hop( radio->context, lr_fhss_params, memory_state_holder );
+//REM AP}
 
 /**
  * @brief Handle TX DONE for LR FHSS operation
@@ -803,11 +809,11 @@ static inline ral_status_t ral_lr_fhss_handle_hop( const ral_t* radio, const ral
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_lr_fhss_handle_tx_done( const ral_t* radio, const ral_lr_fhss_params_t* lr_fhss_params,
-                                                       ral_lr_fhss_memory_state_t memory_state_holder )
-{
-    return radio->driver.lr_fhss_handle_tx_done( radio->context, lr_fhss_params, memory_state_holder );
-}
+//REM APstatic inline ral_status_t ral_lr_fhss_handle_tx_done( const ral_t* radio, const ral_lr_fhss_params_t* lr_fhss_params,
+//REM AP                                                       ral_lr_fhss_memory_state_t memory_state_holder )
+//REM AP{
+//REM AP    return radio->driver.lr_fhss_handle_tx_done( radio->context, lr_fhss_params, memory_state_holder );
+//REM AP}
 
 /**
  * @brief Get the time on air in ms for LR-FHSS transmission
@@ -818,12 +824,12 @@ static inline ral_status_t ral_lr_fhss_handle_tx_done( const ral_t* radio, const
  *
  * @returns Time-on-air value in ms for LR-FHSS transmission
  */
-static inline ral_status_t ral_lr_fhss_get_time_on_air_in_ms( const ral_t*                radio,
-                                                              const ral_lr_fhss_params_t* lr_fhss_params,
-                                                              uint16_t payload_length, uint32_t* time_on_air )
-{
-    return radio->driver.lr_fhss_get_time_on_air_in_ms( radio->context, lr_fhss_params, payload_length, time_on_air );
-}
+//REM APstatic inline ral_status_t ral_lr_fhss_get_time_on_air_in_ms( const ral_t*                radio,
+//REM AP                                                             const ral_lr_fhss_params_t* lr_fhss_params,
+//REM AP                                                              uint16_t payload_length, uint32_t* time_on_air )
+//REM AP{
+//REM AP    return radio->driver.lr_fhss_get_time_on_air_in_ms( radio->context, lr_fhss_params, payload_length, time_on_air );
+//REM AP}
 
 /**
  * @brief Return the number of hop sequences available using the given parameters
@@ -833,11 +839,11 @@ static inline ral_status_t ral_lr_fhss_get_time_on_air_in_ms( const ral_t*      
  *
  * @return Returns the number of valid hop sequences (512 or 384)
  */
-static inline unsigned int ral_lr_fhss_get_hop_sequence_count( const ral_t*                radio,
-                                                               const ral_lr_fhss_params_t* lr_fhss_params )
-{
-    return radio->driver.lr_fhss_get_hop_sequence_count( radio->context, lr_fhss_params );
-}
+//REM APstatic inline unsigned int ral_lr_fhss_get_hop_sequence_count( const ral_t*                radio,
+//REM AP                                                               const ral_lr_fhss_params_t* lr_fhss_params )
+//REM AP{
+//REM AP    return radio->driver.lr_fhss_get_hop_sequence_count( radio->context, lr_fhss_params );
+//REM AP}
 
 /**
  * @brief Get the coding rate and CRC configuration of the last received LoRa packet
@@ -848,10 +854,10 @@ static inline unsigned int ral_lr_fhss_get_hop_sequence_count( const ral_t*     
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_lora_rx_pkt_cr_crc( const ral_t* radio, ral_lora_cr_t* cr, bool* is_crc_present )
-{
-    return radio->driver.get_lora_rx_pkt_cr_crc( radio->context, cr, is_crc_present );
-}
+//REM APstatic inline ral_status_t ral_get_lora_rx_pkt_cr_crc( const ral_t* radio, ral_lora_cr_t* cr, bool* is_crc_present )
+//REM AP{
+//REM AP    return radio->driver.get_lora_rx_pkt_cr_crc( radio->context, cr, is_crc_present );
+//REM AP}
 
 /**
  * @brief Get TX power consumption, in micro ampere
@@ -863,12 +869,12 @@ static inline ral_status_t ral_get_lora_rx_pkt_cr_crc( const ral_t* radio, ral_l
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_tx_consumption_in_ua( const ral_t* radio, const int8_t output_pwr_in_dbm,
-                                                         const uint32_t rf_freq_in_hz, uint32_t* pwr_consumption_in_ua )
-{
-    return radio->driver.get_tx_consumption_in_ua( radio->context, output_pwr_in_dbm, rf_freq_in_hz,
-                                                   pwr_consumption_in_ua );
-}
+//REM APstatic inline ral_status_t ral_get_tx_consumption_in_ua( const ral_t* radio, const int8_t output_pwr_in_dbm,
+//REM AP                                                        const uint32_t rf_freq_in_hz, uint32_t* pwr_consumption_in_ua )
+//REM AP{
+//REM AP    return radio->driver.get_tx_consumption_in_ua( radio->context, output_pwr_in_dbm, rf_freq_in_hz,
+//REM AP                                                   pwr_consumption_in_ua );
+//REM AP}
 
 /**
  * @brief Get GFSK RX power consumption, in micro ampere
@@ -881,13 +887,13 @@ static inline ral_status_t ral_get_tx_consumption_in_ua( const ral_t* radio, con
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_gfsk_rx_consumption_in_ua( const ral_t* radio, const uint32_t br_in_bps,
-                                                              const uint32_t bw_dsb_in_hz, const bool rx_boosted,
-                                                              uint32_t* pwr_consumption_in_ua )
-{
-    return radio->driver.get_gfsk_rx_consumption_in_ua( radio->context, br_in_bps, bw_dsb_in_hz, rx_boosted,
-                                                        pwr_consumption_in_ua );
-}
+//REM APstatic inline ral_status_t ral_get_gfsk_rx_consumption_in_ua( const ral_t* radio, const uint32_t br_in_bps,
+//REM AP                                                             const uint32_t bw_dsb_in_hz, const bool rx_boosted,
+//REM AP                                                              uint32_t* pwr_consumption_in_ua )
+//REM AP{
+//REM AP    return radio->driver.get_gfsk_rx_consumption_in_ua( radio->context, br_in_bps, bw_dsb_in_hz, rx_boosted,
+//REM AP                                                        pwr_consumption_in_ua );
+//REM AP}
 
 /**
  * @brief Get LoRa RX power consumption, in micro ampere
@@ -899,11 +905,11 @@ static inline ral_status_t ral_get_gfsk_rx_consumption_in_ua( const ral_t* radio
  *
  * @returns Operation status
  */
-static inline ral_status_t ral_get_lora_rx_consumption_in_ua( const ral_t* radio, const ral_lora_bw_t bw,
-                                                              const bool rx_boosted, uint32_t* pwr_consumption_in_ua )
-{
-    return radio->driver.get_lora_rx_consumption_in_ua( radio->context, bw, rx_boosted, pwr_consumption_in_ua );
-}
+//REM APstatic inline ral_status_t ral_get_lora_rx_consumption_in_ua( const ral_t* radio, const ral_lora_bw_t bw,
+//REM AP                                                              const bool rx_boosted, uint32_t* pwr_consumption_in_ua )
+//REM AP{
+//REM AP    return radio->driver.get_lora_rx_consumption_in_ua( radio->context, bw, rx_boosted, pwr_consumption_in_ua );
+//REM AP}
 
 /**
  * @brief Generate one or more 32-bit random numbers.
@@ -926,10 +932,10 @@ static inline ral_status_t ral_get_lora_rx_consumption_in_ua( const ral_t* radio
  * Please note that the random numbers produced by the generator do not necessarily have a uniform or
  * Gaussian distribution. If uniformity is needed, perform appropriate software post-processing.
  */
-static inline ral_status_t ral_get_random_numbers( const ral_t* radio, uint32_t* numbers, unsigned int n )
-{
-    return radio->driver.get_random_numbers( radio->context, numbers, n );
-}
+//REM APstatic inline ral_status_t ral_get_random_numbers( const ral_t* radio, uint32_t* numbers, unsigned int n )
+//REM AP{
+//REM AP    return radio->driver.get_random_numbers( radio->context, numbers, n );
+//REM AP}
 
 #ifdef __cplusplus
 }
